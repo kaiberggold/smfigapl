@@ -1,0 +1,103 @@
+# https://github.com/kaiberggold/smfigapl
+#
+# MIT License
+#
+# Copyright 2020 Kai Berggold
+#
+# smfigapl input file. This is a toml File, see https://github.com/toml-lang/toml for details of the Toml specification
+# There are  two sections of the configuration, the Gameplan section where fields, teams, and Bedingungen are defined
+# and the Output section, where additional information and format information for the output file are defined.
+
+# Spielplan Bereich
+
+# Fileschema Eingangsfile
+Datei_Schema = 1
+
+# Anzahl der Runden  (Bereich: 1-10)
+Runden = 7
+
+ 
+Wiederholungen = 2
+
+Mehrfachpaarungen = "ja"
+
+
+# Spielfelder (Bereich: 1-10)
+# Spielfelder sind in der Reihenfolge der Definition geordnet
+# Für jedes Spielfeld gibt es drei Felder
+# - Typ: Dieses Feld wird für die Feldtypen Bedingunen benutzt
+# - Zuordnung: Mit der Zuordnung können bestimmte Teams auf bestimmte Felder eingeschränkt werden. Kann auch benutzt werden um seperate Subturniere zu erzeugen.
+# - Name: Der Name des Spielfeldes welcher im Ausgabefile benutzt wird.
+   
+[[Felder]]
+	Typ = "Kleinfeldtore"
+	Zuordnung="Links"
+	Name="1"
+[[Felder]]
+	Typ = "Jugendtore"
+	Zuordnung="Links"
+	Name="2"
+[[Felder]]
+	Typ = "Kleinfeldtore"
+	Zuordnung="Rechts"
+	Name="3"
+[[Felder]]
+	Typ = "Jugendtore"
+	Zuordnung="Rechts"
+	Name="4"
+
+# Vereine (Range: 1-16)
+# Vereine sind in der Reihenfolge der Definition geordnet
+# Für jeden Verein gibt es zwei Felder:
+# - Name: This is used for the Gleicher_Verein condition and for the output file
+# - Farben: Definiert die Teams innerhalb eines Vereins. Typischerweise Zuordnung zu Trikotfarben, aber nicht darauf beschränkt.
+
+[[Vereine]]
+    Name = "Norden"
+    Farben = [ 'Rot', 'Grün'] 
+[[Vereine]]
+    Name = "Süden"
+    Farben = [ 'Blau', 'Gelb'] 
+[[Vereine]]
+    Name = "Westen"
+    Farben = [ 'Rot', 'Grün'] 
+[[Vereine]]
+    Name = "Osten"
+    Farben = [ 'Violett', 'Grau'] 
+    
+# Bedingungen
+# Bedingunen können durch Min/Max Werte festgelegt werden. Alle Bedingungen müssen für einen validen Spielplan erfüllt sein. 
+# Wenn keine Lösung gefunden wird, versuche die Bedingunge aufzuweiten. 
+# Für manche Bedingungen ist nur ein Limit möglich
+# 
+
+[Bedingungen]
+	# Pausen: Nur Max Wert. Jedes Team hat nicht mehr als Max Runden ohne Spiel
+    [Bedingungen.Pausen]
+        Max = 1
+    # Feldtypen: Jedes Team hat die Min/Max Anzahl auf den definierten Feldtypen. "Name" muss einem der Feldtypen aus dem Felder Abschnitt ensprechen
+    [[Bedingungen.Feldtypen]]
+        Name = "Kleinfeldtore"
+        Min = 3
+        Max = 4
+    [[Bedingungen.Feldtypen]]
+        Name = "Jugendtore"
+        Min = 3
+        Max = 4
+    # Vereinsintern: Nur Max Wert. Höchstens Max Spiele gegen Teams aus dem gleichen Verein
+    [Bedingungen.Vereinsintern]
+        Max = 2
+    # Höchstens Max leere Felder in jeder Runde
+    [Bedingungen.Leere_Felder]
+        Max = 1
+
+	# Zuordnungen können bestimmte Teams auf bestimmte Felder beschränken
+	# Das kann benutzt werden um das Turnier in Subturniere zu unterteilen
+	# Sperrliste muss eine gerade Anzahl von Strings sein , Verein + Farbe für jedes Team 
+	# [[Bedingungen.Zuordnungen]]
+  	# Name = "Left" 
+    # Sperrliste = ['Nord', 'Rot']
+
+
+# Ausgabe Sektion
+# hier im seperatem  format.toml file (-f Option)      

@@ -1,0 +1,55 @@
+#smfigap input file 
+
+# Input File scheme ( Not used yet)
+file_scheme = 1
+
+# Number of Rounds to play (Range: 1-10)
+rounds = 6
+
+# Fields (Range: 1-10). 
+[[fields]]
+    type = "Funino"
+    subtype="Vorne"
+    name="1"
+[[fields]]
+    type = "Jugendtore"
+    subtype="Vorne"
+    name="2"
+[[fields]]
+    type = "Funino"
+    subtype="Hinten"
+    name="3"
+[[fields]]
+    type = "Jugendtore"
+    subtype="Hinten"
+    name="4"
+    
+[[clubs]]
+    name = "A"
+    colors = [ '1', '2'] 
+[[clubs]]
+    name = "B"
+    colors = [ '1', '2'] 
+[[clubs]]
+    name = "C"
+    colors = [ '1', '2'] 
+[[clubs]]
+    name = "D"
+#    colors = [ '1', '2'] 
+    colors = [ '1'] 
+
+[conditions]
+    [conditions.pause_games]
+        max = 1
+    [[conditions.field_types]]
+        name = "Funino"
+        min = 2
+        max = 3
+    [[conditions.field_types]]
+        name = "Jugendtore"
+        min = 2
+        max = 3
+    [conditions.same_club]
+        max = 2
+    [conditions.empty_fields]
+        max = 1

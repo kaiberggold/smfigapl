@@ -1,0 +1,97 @@
+# https://github.com/kaiberggold/smfigapl
+#
+# MIT License
+#
+# Copyright 2020 Kai Berggold
+#
+# smfigapl input file. This is a toml File, see https://github.com/toml-lang/toml for details of the Toml specification
+# There are  two sections of the configuration, the Gameplan section where fields, teams, and conditions are defined
+# and the Output section, where additional information and format information for the output file are defined.
+
+# Gameplan section
+
+# Input File scheme ( Not used yet)
+file_scheme = 1
+
+# Number of Rounds to play (Range: 1-10)
+rounds = 7
+
+# Fields (Range: 1-10)
+# Fields are ordered in the order of definition.
+# For every field there are three fields:
+# - type: This is used for the fieldtype conditions, and for the output file
+# - subtype: Used to restrict certain teams to certain subtypes. Can be used two divide the tournamen in subtournaments, but is not restricted to that.
+# - name: The name of the filed used in the Output File
+   
+[[fields]]
+    type = "Small Goals"
+    subtype="Left"
+    name="1"
+[[fields]]
+    type = "Large Goals"
+    subtype="Left"
+    name="2"
+[[fields]]
+    type = "Small Goals"
+    subtype="Right"
+    name="3"
+[[fields]]
+    type = "Large Goals"
+    subtype="Right"
+    name="4"
+
+# Clubs (Range: 1-16)
+# Clubs are ordered in the order of definition.
+# For every field there are two fields:
+# - name: This is used for the same_club condition and for the output file
+# - colors: Defines the Teams within a Club. Typically these are colors corresponing to the trikot color, but theres no restriction to colors
+
+[[clubs]]
+    name = "North"
+    colors = [ 'Red', 'Green'] 
+[[clubs]]
+    name = "South"
+    colors = [ 'Blue', 'Yellow'] 
+[[clubs]]
+    name = "West"
+    colors = [ 'Red', 'Green'] 
+[[clubs]]
+    name = "East"
+    colors = [ 'Indigo', 'Grew'] 
+    
+# Conditions
+# Side Conditions can be restricted by maximum / minimum Values. All conditions have to be fullfilled to obtain a valid gameplan 
+# If not solution is found, try to widen the windows between min an max values 
+# For some conditions, only one restricion is poassible
+# The Pairing condition is always active (every pairing may only occur once, or once every iteration.
+
+[conditions]
+	# Pause games: Only max Value. Every team has no more than max rounds without a game.
+    [conditions.pause_games]
+        max = 1
+    # Field types: Every Teams has within min/max Games on the specified fieldtype. "name" has to match on of the field types defined in the fields definitions.
+    [[conditions.field_types]]
+        name = "Small Goals"
+        min = 3
+        max = 4
+    [[conditions.field_types]]
+        name = "Large Goals"
+        min = 3
+        max = 4
+    # Same Club: Only max Value. Every Team has up to max games with teams which belong to the same club.
+    [conditions.same_club]
+        max = 2
+    # Only max. For every round there are only up to max fields, where is no game.
+    [conditions.empty_fields]
+        max = 1
+
+	# Sub Type conditions are used to restrict certain teams to a subset of the available fields. 
+	# The Restriction of  Subsets of Teams to a Subsets of fields may be used to obtain sub tournaments
+	# The teams_deny list has to habe am even number of strings, club + color for each team. 
+	#[[conditions.subtypes]]
+  	#name = "Left" 
+    #teams_deny = ['North', 'Red']
+
+
+# Output section
+# her in seperate format.toml file (-f option)      

@@ -1,0 +1,60 @@
+#smfigap input file 
+
+# Input File scheme
+file_scheme = 1
+
+# Basic setting
+rounds = 6
+iterations = 2
+repeat_pairings = true
+
+[[fields]]
+	type = "Funino"
+	subtype="Vorne"
+	name="1"
+[[fields]]
+	type = "Jugendtore"
+	subtype="Vorne"
+	name="2"
+[[fields]]
+	type = "Funino"
+	subtype="Hinten"
+	name="3"
+[[fields]]
+	type = "Jugendtore"
+	subtype="Hinten"
+	name="4"
+
+[[clubs]]
+	name = "A"
+	colors = [ '1', '2'] 
+[[clubs]]
+	name = "B"
+	colors = [ '1', '2'] 
+[[clubs]]
+	name = "C"
+	colors = [ '1', '2'] 
+[[clubs]]
+	name = "D"
+	colors = [ '1', '2']   
+
+[conditions]
+	[conditions.pause_games]
+		max = 3
+	[[conditions.field_types]]
+		name = "Funino"
+		min = 3
+		max = 3
+	[[conditions.field_types]]
+		name = "Jugendtore"
+		min = 3
+		max = 3
+	[conditions.same_club]
+		max = 0
+[[conditions.subtypes]]
+  name = "Vorne" 
+  teams_deny = ['A', '2', 'B', '2', 'C', '2', 'D', '2'] 
+[[conditions.subtypes]]
+  name = "Hinten" 
+  teams_deny = ['A', '1', 'B', '1', 'C', '1', 'D', '1'] 
+

@@ -1,0 +1,247 @@
+# https://github.com/kaiberggold/smfigapl
+#
+# MIT License
+#
+# Copyright 2020 Kai Berggold
+#
+# smfigapl input file. This is a toml File, see https://github.com/toml-lang/toml for details of the Toml specification
+# There are  two sections of the configuration, the Gameplan section where fields, teams, and conditions are defined
+# and the Output section, where additional information and format information for the output file are defined.
+
+# Gameplan section
+
+# Input File scheme ( Not used yet)
+file_scheme = 1
+
+[information]
+    [information.general]
+        title = "Kleinfeldturnier"
+        sub_title = "Neustadt e. V"
+        place = "Neustadt Kunstrasenplatz"
+        address ="Neue Straße 1, 12345 Neustadt"
+        
+    [information.date_time]
+        start_date = 2021-06-01
+        start_time = 14:00:00
+        round_time = 00:07:00
+        break_time = 00:02:00
+        
+[format]
+    [format.settings]
+        separate_tournaments = false
+        show_teams = true
+        show_teams_text_colors = true
+        teams_use_collumn = true
+        statistic_use_collumn = true
+        show_statistic = true
+        fixed_fields = 8
+        fixed_rounds = 8
+        fixed_tournaments = 2
+        use_team_color = true
+        show_filter_collumn = true
+        filter_collumn = 11
+        filter_collumn_fixed_rows = [4,146,73,180]
+        
+    [format.information]
+        [format.information.base_pos]
+            pos_x=0
+            pos_y=0
+        [format.information.result_message]
+            pos_x=0
+            pos_y=0
+        [[format.information.text_fields]]
+            pos_rel_x = 0
+            pos_rel_y = 1
+            type = "title"
+        [[format.information.text_fields]]
+            pos_rel_x = 3
+            pos_rel_y = 3
+            type = "sub_title"
+        [[format.information.text_fields]]
+            pos_rel_x = 3
+            pos_rel_y = 2
+            type = "address"
+
+        [[format.information.date_time]]
+            type="start_date"
+            pos_rel_x = 1
+            pos_rel_y = 3
+            format_string ="%d.%m.%Y"
+        [[format.information.date_time]]
+            type="start_time"
+            pos_rel_x = 1
+            pos_rel_y = 5
+            format_string ="%H:%M"
+        [[format.information.date_time]]
+            type ="round_time"
+            pos_rel_x = 5
+            pos_rel_y = 5
+            format_string ="%H:%M"
+        [[format.information.date_time]]
+            type = "break_time"
+            pos_rel_x = 8
+            pos_rel_y = 5
+            format_string ="%H:%M"
+            
+        [[format.information.date_time_header]]
+            type = "start_date"
+            pos_rel_x = 0
+            pos_rel_y = -1
+            text =""
+        [[format.information.date_time_header]]
+            type = "start_time"
+            pos_rel_x = -1
+            pos_rel_y = 0
+            text ="Zeit"
+        [[format.information.date_time_header]]
+            type = "round_time"
+            pos_rel_x = -2
+            pos_rel_y = 0
+            text ="Rundenzeit"
+        [[format.information.date_time_header]]
+            type = "break_time"
+            pos_rel_x = -1
+            pos_rel_y = 0
+            text ="Pausenzeit"
+
+    [format.teams]
+        [format.teams.base_pos]
+            pos_x=0
+            pos_y=145
+        [format.teams.title]
+            pos_rel_x = 0
+            pos_rel_y = -1   
+            text = "Teams"  
+        [format.teams.text_color] 
+            pos_rel_x = 1
+            pos_rel_y = 0   
+            colors = ['red','blue', 'green']
+        [format.teams.text_color.title]
+            pos_rel_x=1
+            pos_rel_y=-1    
+            text = "Textfarbe"  
+        
+    [format.game_plan]
+        [format.game_plan.base_pos]
+            pos_x=0
+            pos_y=6
+        [format.game_plan.title]
+            pos_rel_x = 0
+            pos_rel_y = 0
+            text = ""
+            
+    [format.tournament]    
+        [format.tournament.rel_pos]
+            pos_rel_x=0
+            pos_rel_y=1
+        [format.tournament.title]
+            pos_rel_x=0
+            pos_rel_y=0   
+            text = "Turnier $0"  
+        [format.tournament.collumns]
+            [format.tournament.collumns.rel_pos]
+                pos_rel_x=0
+                pos_rel_y=2
+            [[format.tournament.collumns.collumn]]
+                pos_rel_x = 0
+                pos_rel_y = -1
+                type="round"
+                text = "Runde"
+            [[format.tournament.collumns.collumn]]
+                pos_rel_x = 1
+                pos_rel_y = -1
+                type="start_time"
+                text = "Startzeit"
+            [[format.tournament.collumns.collumn]]
+                pos_rel_x = 2
+                pos_rel_y = -1
+                type="end_time"
+                text = "Endzeit"
+            [[format.tournament.collumns.collumn]]
+                pos_rel_x = 3
+                pos_rel_y = -1
+                type="home_team"
+                text = "Team 1"
+            [[format.tournament.collumns.collumn]]
+                pos_rel_x = 4
+                pos_rel_y = -1
+                type="home_team_text_color"
+                text = "Textfarbe"                
+            [[format.tournament.collumns.collumn]]
+                pos_rel_x = 5
+                pos_rel_y = -1
+                type="away_team"
+                text = "Team 2"
+            [[format.tournament.collumns.collumn]]
+                pos_rel_x = 6
+                pos_rel_y = -1
+                type="away_team_text_color"
+                text = "Text Color"                
+            [[format.tournament.collumns.collumn]]
+                pos_rel_x = 7
+                pos_rel_y = -1
+                type="field_name"
+                text = "Feld"            
+            [[format.tournament.collumns.collumn]]
+                pos_rel_x = 8
+                pos_rel_y = -1
+                type="field_type"
+                text = "Spielfeld"
+            [[format.tournament.collumns.collumn]]
+                pos_rel_x = 9
+                pos_rel_y = -1
+                type="pause_teams"
+                text = "Pause"
+            [[format.tournament.collumns.collumn]]
+                pos_rel_x = 10
+                pos_rel_y = -1
+                type="pause_teams_text_color"
+                text = "Textfarbe"
+
+    [format.statistic]
+        [format.statistic.base_pos]
+            pos_x=0
+            pos_y=161
+        [format.statistic.title]
+            pos_rel_x = 0
+            pos_rel_y = 1
+            text = "Statistik"
+        [format.statistic.rows]
+            [format.statistic.rows.rel_pos]
+                pos_rel_x=1
+                pos_rel_y=2   
+            [[format.statistic.rows.row]]
+                pos_rel_x = 0
+                pos_rel_y = -1
+                type = "n_games"
+                text = "Anzahl Spiele"
+            [[format.statistic.rows.row]]
+                pos_rel_x = 1
+                pos_rel_y = -1
+                type = "n_same_pairing"
+                text = "Gesamtwiederholungen Paarungen"
+            [[format.statistic.rows.row]]
+                pos_rel_x = 2
+                pos_rel_y = -1
+                type = "max_games_same_team"
+                text = "Maximalwiederholung einer Paarung"
+            [[format.statistic.rows.row]]
+                pos_rel_x = 3
+                pos_rel_y = -1
+                type = "same_club"
+                text = "Vereinsintern"
+            [[format.statistic.rows.row]]
+                pos_rel_x = 4
+                pos_rel_y = -1
+                type = "home_games"
+                text = "Heim" 
+            [[format.statistic.rows.row]]
+                pos_rel_x = 5
+                pos_rel_y = -1
+                type = "away_games"
+                text = "Auswärts"            
+            [[format.statistic.rows.row]]
+                pos_rel_x = 6
+                pos_rel_y = -1
+                type = "field_types"
+                text = "$0"

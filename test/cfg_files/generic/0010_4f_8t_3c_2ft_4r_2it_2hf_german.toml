@@ -1,0 +1,60 @@
+#smfigapl Eingangsfile
+
+# Fileschema Eingangsfile
+Dateischema = 1
+
+# Basic setting
+Runden = 6
+Wiederholungen = 2
+Mehrfachpaarungen = true
+
+[[Felder]]
+	Typ = "Funino"
+	Zuordnung="Vorne"
+	Name="1"
+[[Felder]]
+	Typ = "Jugendtore"
+	Zuordnung="Vorne"
+	Name="2"
+[[Felder]]
+	Typ = "Funino"
+	Zuordnung="Hinten"
+	Name="3"
+[[Felder]]
+	Typ = "Jugendtore"
+	Zuordnung="Hinten"
+	Name="4"
+
+[[Vereine]]
+	Name = "A"
+	Farben = [ '1', '2'] 
+[[Vereine]]
+	Name = "B"
+	Farben = [ '1', '2'] 
+[[Vereine]]
+	Name = "C"
+	Farben = [ '1', '2'] 
+[[Vereine]]
+	Name = "D"
+	Farben = [ '1', '2']   
+
+[Bedingungen]
+	[Bedingungen.Pausen]
+		Max = 3
+	[[Bedingungen.Feldtypen]]
+		Name = "Funino"
+		Min = 3
+		Max = 3
+	[[Bedingungen.Feldtypen]]
+		Name = "Jugendtore"
+		Min = 3
+		Max = 3
+	[Bedingungen.Vereinsintern]
+		Max = 0
+[[Bedingungen.Zuordnungen]]
+  Name = "Vorne" 
+  Sperrliste = ['A', '2', 'B', '2', 'C', '2', 'D', '2'] 
+[[Bedingungen.Zuordnungen]]
+  Name = "Hinten" 
+  Sperrliste = ['A', '1', 'B', '1', 'C', '1', 'D', '1'] 
+

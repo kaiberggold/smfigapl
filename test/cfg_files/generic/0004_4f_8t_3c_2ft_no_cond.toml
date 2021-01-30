@@ -1,0 +1,36 @@
+#smfigap input file 
+
+# Input File scheme
+file_scheme = 1
+
+rounds = 7
+
+[[fields]]
+	type = "Funino"
+	subtype="Vorne"
+	name="1"
+[[fields]]
+	type = "Jugendtore"
+	subtype="Vorne"
+	name="2"
+[[fields]]
+	type = "Funino"
+	subtype="Hinten"
+	name="3"
+[[fields]]
+	type = "Jugendtore"
+	subtype="Hinten"
+	name="4"
+	
+[[clubs]]
+	name = "A"
+	colors = [ '1', '2'] 
+[[clubs]]
+	name = "B"
+	colors = [ '1', '2'] 
+[[clubs]]
+	name = "C"
+	colors = [ '1', '2'] 
+[[clubs]]
+	name = "D"
+	colors = [ '1', '2'] 
