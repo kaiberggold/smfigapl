@@ -1,0 +1,43 @@
+== exit code
+0
+== stdout
+
+Steps: 9
+
+== stderr
+
+== output file
+Tournament: 1
+Round: 1
+                 North Blue : North Red                     
+                North Green : North Black                   
+                North White : North Pink                    
+
+Round: 2
+                  North Red : North Green                   
+                 North Blue : North White                   
+                North Black : North Pink                    
+
+Round: 3
+                North Black : North Red                     
+                 North Pink : North Blue                    
+                North Green : North White                   
+
+Tournament: 2
+Round: 1
+                 South Blue : South Red                     
+
+Round: 2
+                  South Red : South Blue                    
+
+Round: 3
+                  South Red : South Blue                    
+
+Team:                         North Red                North Blue               North Green              North Black              North White              North Pink               South Red                South Blue               
+Number of games               3                        3                        3                        3                        3                        3                        3                        3                        
+Repeated Games                0                        0                        0                        0                        0                        0                        2                        2                        
+Max Games same Team           1                        1                        1                        1                        1                        1                        3                        3                        
+Same Club                     3                        3                        3                        3                        3                        3                        3                        3                        
+Number of home games          1                        2                        2                        2                        1                        1                        2                        1                        
+Number of away games          2                        1                        1                        1                        2                        2                        1                        2                        
+A                             3                        3                        3                        3                        3                        3                        3                        3                        

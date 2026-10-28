@@ -1,0 +1,12 @@
+== exit code
+0
+== stdout
+
+Steps: 0
+
+== stderr
+No game plan possible
+At least 5 pauses are needed, the pause limit allows only 0
+
+== output file
+(no file)

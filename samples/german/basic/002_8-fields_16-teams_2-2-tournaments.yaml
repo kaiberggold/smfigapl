@@ -1,0 +1,100 @@
+# https://github.com/kaiberggold/smfigapl
+#
+# MIT License
+#
+# Copyright 2020 Kai Berggold
+#
+# Ein Setup des smfigapl-Spielplaners in YAML (https://yaml.org).
+# Die Schlüssel sind in docs/schema/setup.schema.json beschrieben; die
+# Schlüssel sind englisch, die Namen der Felder, Vereine und Teams frei.
+# Ein unbekannter Schlüssel wird mit einer Warnung ignoriert.
+# Das Layout der CSV-Ausgabe steht in einer eigenen Datei (format.yaml, Option -f).
+
+# Die Version des Formats dieser Datei
+format_version: 1
+# Anzahl der Runden (1-10)
+rounds: 8
+# Paarungen dürfen wiederholt werden (repeat_pairings: true), höchstens
+# iterations mal
+iterations: 2
+repeat_pairings: true
+# Heim und Gast tauschen, so dass jedes Team etwa gleich oft beides ist
+home_away_balance: true
+# Die Runden so ordnen, dass kein Team zwei Runden hintereinander pausiert
+# und kein Spiel in der nächsten Runde auf demselben Feld wiederholt wird
+optimize_round_order: true
+
+# Spielfelder (1-10), in der Reihenfolge des Plans. Jedes Feld hat
+# - name: der Name des Feldes im Plan
+# - type: der Feldtyp, für die Feldtyp-Bedingungen und die Ausgabe
+# - subtype: die Zuordnung; Teams können von den Feldern einer Zuordnung
+#   ausgeschlossen werden (subtype_deny); Zuordnungen, die kein Team teilt,
+#   bilden getrennte Subturniere
+fields:
+  - {name: '1', type: Funino, subtype: Vorne}
+  - {name: '2', type: Jugendtore, subtype: Vorne}
+  - {name: '3', type: Funino, subtype: Vorne}
+  - {name: '4', type: Jugendtore, subtype: Vorne}
+  - {name: '5', type: Funino, subtype: Hinten}
+  - {name: '6', type: Jugendtore, subtype: Hinten}
+  - {name: '7', type: Funino, subtype: Hinten}
+  - {name: '8', type: Jugendtore, subtype: Hinten}
+
+# Vereine (1-16), in der Reihenfolge des Plans. Jeder Verein hat
+# - name: für die Bedingung "gleicher Verein" und die Ausgabe
+# - teams: die Teams des Vereins, z. B. nach Trikotfarben
+clubs:
+  - name: A
+    teams: ['1', '2']
+  - name: B
+    teams: ['1', '2']
+  - name: C
+    teams: ['1', '2']
+  - name: D
+    teams: ['1', '2']
+  - name: E
+    teams: ['1', '2']
+  - name: F
+    teams: ['1', '2']
+  - name: G
+    teams: ['1', '2']
+  - name: H
+    teams: ['1', '2']
+
+# Bedingungen: der Plan erfüllt alle. Gibt es keinen Plan, die Grenzen
+# erweitern. Jede Paarung wird in jedem Fall einmal (oder iterations mal)
+# gespielt.
+conditions:
+  # Jedes Team pausiert in höchstens max_pauses Runden
+  max_pauses: 3
+  # Jedes Team spielt höchstens max_same_club_games Spiele gegen Teams des
+  # eigenen Vereins
+  max_same_club_games: 0
+  # Jedes Team spielt min bis max Spiele auf den Feldern eines Typs (type:
+  # einer der Feldtypen der Felder; min oder max kann fehlen)
+  field_types:
+    - {type: Funino, min: 4, max: 4}
+    - {type: Jugendtore, min: 4, max: 4}
+  # Teams, die nicht auf den Feldern einer Zuordnung spielen dürfen, z. B. für
+  # Subturniere
+  subtype_deny:
+    - subtype: Vorne
+      teams:
+        - {club: A, team: '2'}
+        - {club: B, team: '2'}
+        - {club: C, team: '2'}
+        - {club: D, team: '2'}
+        - {club: E, team: '2'}
+        - {club: F, team: '2'}
+        - {club: G, team: '2'}
+        - {club: H, team: '2'}
+    - subtype: Hinten
+      teams:
+        - {club: A, team: '1'}
+        - {club: B, team: '1'}
+        - {club: C, team: '1'}
+        - {club: D, team: '1'}
+        - {club: E, team: '1'}
+        - {club: F, team: '1'}
+        - {club: G, team: '1'}
+        - {club: H, team: '1'}

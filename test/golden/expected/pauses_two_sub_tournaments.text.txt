@@ -1,0 +1,32 @@
+== exit code
+0
+== stdout
+
+Steps: 6
+
+== stderr
+
+== output file
+Round: 1
+                  North Red : North Blue                    
+                  South Red : South Blue                    
+                       Break: North Green, South Green
+
+Round: 2
+                  North Red : North Green                   
+                  South Red : South Green                   
+                       Break: North Blue, South Blue
+
+Round: 3
+                 North Blue : North Green                   
+                 South Blue : South Green                   
+                       Break: North Red, South Red
+
+Team:                         North Red                North Blue               North Green              South Red                South Blue               South Green              
+Number of games               2                        2                        2                        2                        2                        2                        
+Repeated Games                0                        0                        0                        0                        0                        0                        
+Max Games same Team           1                        1                        1                        1                        1                        1                        
+Same Club                     2                        2                        2                        2                        2                        2                        
+Number of home games          2                        1                        0                        2                        1                        0                        
+Number of away games          0                        1                        2                        0                        1                        2                        
+A                             2                        2                        2                        2                        2                        2                        

@@ -1,0 +1,8 @@
+# The checks of the project (../.clang-tidy) with two exceptions for the tests:
+# - cognitive complexity: every googletest assertion macro expands to branches
+# - string concatenation: the tests build readable configurations with +
+InheritParentConfig: true
+HeaderFilterRegex: '.*/(src|test)/.*|.*/include/smfigapl/.*'
+Checks: >
+  -readability-function-cognitive-complexity,
+  -performance-inefficient-string-concatenation

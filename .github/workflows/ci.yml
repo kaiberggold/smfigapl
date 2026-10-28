@@ -1,0 +1,165 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  format:
+    name: Formatting (astyle)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install astyle
+        run: sudo apt-get update && sudo apt-get install -y astyle
+      - name: Check formatting
+        run: |
+          astyle --version
+          changed=$(astyle --options=.astylerc --dry-run --recursive "src/*.cpp" "src/*.hpp" "include/*.hpp" "apps/*.cpp" "apps/*.hpp" "test/*.cpp" "test/*.hpp" "tools/*.cpp" "examples/*.cpp" | grep '^Formatted' || true)
+          if [ -n "$changed" ]; then
+            echo "Not formatted, run astyle --options=.astylerc (see .astylerc):"
+            echo "$changed"
+            exit 1
+          fi
+
+  # The samples and the test configurations match the schemas of the
+  # YAML format (docs/schema), so that the schemas stay true
+  schema:
+    name: YAML schemas
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install check-jsonschema
+        run: pipx install check-jsonschema==0.39.0
+      - name: Check
+        run: |
+          check-jsonschema --check-metaschema docs/schema/*.json
+          check-jsonschema --schemafile docs/schema/setup.schema.json samples/*/basic/0*.yaml test/cfg_files/*/0*.yaml test/golden/configs/*.yaml test/golden/csv/pauses_two_sub_tournaments.yaml
+          check-jsonschema --schemafile docs/schema/layout.schema.json samples/*/basic/format.yaml test/golden/csv/separate_tournaments_format.yaml
+
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: GCC
+            os: ubuntu-24.04
+            cxx: g++
+            config: Release
+          - name: Clang
+            os: ubuntu-24.04
+            cxx: clang++
+            config: Release
+          - name: GCC sanitizers (ASan, UBSan)
+            os: ubuntu-24.04
+            cxx: g++
+            config: Debug
+            flags: -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all
+          # several searches at once (test threads.parallelSearches)
+          - name: GCC ThreadSanitizer
+            os: ubuntu-24.04
+            cxx: g++
+            config: Debug
+            flags: -fsanitize=thread -fno-omit-frame-pointer
+          - name: MSVC
+            os: windows-latest
+            config: Release
+    steps:
+      - uses: actions/checkout@v5
+      # ThreadSanitizer does not work with the address space randomization of the runner
+      - name: Address space randomization for ThreadSanitizer
+        if: contains(matrix.flags, 'thread')
+        run: sudo sysctl vm.mmap_rnd_bits=28
+      - name: Configure
+        shell: bash
+        run: |
+          args=(-S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.config }} -DSM_WARNINGS_AS_ERRORS=ON)
+          if [ -n "${{ matrix.cxx }}" ]; then args+=(-DCMAKE_CXX_COMPILER=${{ matrix.cxx }}); fi
+          if [ -n "${{ matrix.flags }}" ]; then args+=("-DCMAKE_CXX_FLAGS=${{ matrix.flags }}"); fi
+          cmake "${args[@]}"
+      - name: Build
+        run: cmake --build build --config ${{ matrix.config }} --parallel
+      - name: Test
+        env:
+          TSAN_OPTIONS: halt_on_error=1
+        run: ctest --test-dir build --build-config ${{ matrix.config }} --output-on-failure --parallel 4
+
+  # The library as a package: installed and found with find_package, and
+  # added with FetchContent (the sources of this commit); the example
+  # application builds and runs both ways
+  package:
+    name: CMake package and FetchContent
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - name: Build and install the library
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DSM_BUILD_TESTS=OFF -DSM_BUILD_CLI=OFF
+          cmake --build build --parallel
+          cmake --install build --prefix "$PWD/install"
+      - name: Example with find_package
+        run: |
+          cmake -S examples/consumer -B consumer-package -DSMFIGAPL_FIND_PACKAGE=ON -DCMAKE_PREFIX_PATH="$PWD/install"
+          cmake --build consumer-package --parallel
+          ./consumer-package/consumer
+      - name: Example with FetchContent
+        run: |
+          cmake -S examples/consumer -B consumer-fetch -DFETCHCONTENT_SOURCE_DIR_SMFIGAPL="$PWD"
+          cmake --build consumer-fetch --parallel
+          ./consumer-fetch/consumer
+
+  # The minimum platforms of the app: the library compiled
+  # for Android 10 (API level 29) and iOS 16, 64-bit; no tests (they would
+  # need a device or an emulator)
+  android:
+    name: Android NDK (${{ matrix.abi }})
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        abi: [arm64-v8a, x86_64]
+    steps:
+      - uses: actions/checkout@v5
+      - name: Configure
+        run: >
+          cmake -S . -B build
+          -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK_LATEST_HOME/build/cmake/android.toolchain.cmake
+          -DANDROID_ABI=${{ matrix.abi }} -DANDROID_PLATFORM=android-29
+          -DCMAKE_BUILD_TYPE=Release -DSM_BUILD_TESTS=OFF -DSM_WARNINGS_AS_ERRORS=ON
+      - name: Build the library and the command line tool
+        run: cmake --build build --parallel
+
+  ios:
+    name: iOS (${{ matrix.sdk }})
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        sdk: [iphoneos, iphonesimulator]
+    steps:
+      - uses: actions/checkout@v5
+      - name: Configure
+        run: >
+          cmake -S . -B build -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT=${{ matrix.sdk }}
+          -DCMAKE_OSX_ARCHITECTURES=arm64 -DCMAKE_OSX_DEPLOYMENT_TARGET=16.0
+          -DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY
+          -DCMAKE_BUILD_TYPE=Release -DSM_BUILD_TESTS=OFF -DSM_BUILD_CLI=OFF -DSM_WARNINGS_AS_ERRORS=ON
+      - name: Build the library
+        # an app would need signing; the libraries are what the app links
+        run: cmake --build build --parallel --target smfigapl_types smfigapl_model smfigapl_formats smfigapl_api smfigapl_solver smfigapl_report
+
+  clang-tidy:
+    name: clang-tidy
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DSM_BUILD_BENCHMARKS=ON
+      - name: Build (generated headers)
+        run: cmake --build build --parallel
+      - name: clang-tidy
+        run: |
+          clang-tidy --version
+          git ls-files 'src/*.cpp' 'apps/*.cpp' 'test/*.cpp' 'tools/*.cpp' | xargs -P 4 -n 1 clang-tidy -p build --quiet

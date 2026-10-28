@@ -1,41 +1,25 @@
-#ifndef SMTESTMISC
-#define SMTESTMISC
+#pragma once
 
+#include <algorithm>
 #include <vector>
 #include <filesystem>
-#ifdef SM_CLANG
-#include <dirent.h>
-#endif
+#include <string>
 
-static std::vector<std::string> folderList(std::string path)
+// Folder of the configuration files used by the tests (set by CMake)
+inline const std::string testDataDir = SM_TEST_DATA_DIR;
+
+inline std::vector<std::string> folderList(const std::string& path)
 {
-	std::vector<std::string> temp;
-	temp.resize(0);
+    std::vector<std::string> temp;
+    temp.resize(0);
 
 //workaround for not compiling with clang 10.0.1
-#ifdef SM_CLANG
-if (auto folder = opendir(path.c_str())) {
-    while (auto f = readdir(folder))
+    for (const auto& p : std::filesystem::directory_iterator(path))
     {
-        if (f->d_name[0] == '.' || f->d_name[0]=='s')
-            continue;
-        temp.push_back(path+"/"+std::string(f->d_name));
+        if (p.path().extension().string() == ".yaml" && p.path().filename().string().substr(0, 1) == "0")
+            temp.push_back(p.path().string());
+
     }
-    closedir(folder);
+    std::ranges::sort(temp); // iterator is not ordered
+    return temp;
 }
-#else
-	for(auto& p: std::filesystem::directory_iterator(path))
-	{
-		if (p.path().extension().string()==".toml" && p.path().filename().string().substr(0, 1)=="0")
-			temp.push_back(p.path().string());
-
-	}
-	sort(temp.begin(), temp.end()); // iterator is not ordered
-#endif
-	return temp;
-}
-
-
-
-
-#endif /* SMTESTMISC */

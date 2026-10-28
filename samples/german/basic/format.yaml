@@ -1,0 +1,100 @@
+# https://github.com/kaiberggold/smfigapl
+#
+# MIT License
+#
+# Copyright 2020 Kai Berggold
+#
+# Das Layout der CSV-Ausgabe des smfigapl-Spielplaners in YAML
+# (https://yaml.org), für die Tabellenvorlage tournament.ods (Option -f).
+# Die Schlüssel sind in docs/schema/layout.schema.json beschrieben.
+
+layout_version: 1
+
+# Texte, Daten und Zeiten für die Ausgabe (die Schlüssel sind freie Namen,
+# genutzt von format.information unten); Daten JJJJ-MM-TT, Zeiten HH:MM:SS
+information:
+  general:
+    address: Neue Straße 1, 12345 Neustadt
+    place: Neustadt Kunstrasenplatz
+    sub_title: Neustadt e. V
+    title: Kleinfeldturnier
+  date_time:
+    break_time: '00:02:00'
+    round_time: '00:07:00'
+    start_date: '2021-06-01'
+    start_time: '14:00:00'
+
+# Wo die Teile des Plans in der Tabelle stehen (Spalten x, Zeilen y)
+format:
+  settings:
+    separate_tournaments: false
+    show_teams: true
+    show_teams_text_colors: true
+    teams_use_column: true
+    statistic_use_column: true
+    show_statistic: true
+    show_filter_column: true
+    use_team_color: true
+    fixed_fields: 8
+    fixed_rounds: 8
+    fixed_tournaments: 2
+    filter_column: 11
+    filter_column_fixed_rows: [4, 146, 73, 180]
+  information:
+    base_pos: {pos_x: 0, pos_y: 0}
+    result_message: {pos_rel_x: 0, pos_rel_y: 0}
+    text_fields:
+      - {type: address, pos_rel_x: 3, pos_rel_y: 2}
+      - {type: sub_title, pos_rel_x: 3, pos_rel_y: 3}
+      - {type: title, pos_rel_x: 0, pos_rel_y: 1}
+    date_time:
+      - {type: break_time, pos_rel_x: 8, pos_rel_y: 5, format_string: '%H:%M'}
+      - {type: round_time, pos_rel_x: 5, pos_rel_y: 5, format_string: '%H:%M'}
+      - {type: start_date, pos_rel_x: 1, pos_rel_y: 3, format_string: '%d.%m.%Y'}
+      - {type: start_time, pos_rel_x: 1, pos_rel_y: 5, format_string: '%H:%M'}
+    date_time_header:
+      - {type: break_time, pos_rel_x: -1, pos_rel_y: 0, text: Pausenzeit}
+      - {type: round_time, pos_rel_x: -2, pos_rel_y: 0, text: Rundenzeit}
+      - {type: start_date, pos_rel_x: 0, pos_rel_y: -1, text: ''}
+      - {type: start_time, pos_rel_x: -1, pos_rel_y: 0, text: Zeit}
+  teams:
+    base_pos: {pos_x: 0, pos_y: 145}
+    title: {pos_rel_x: 0, pos_rel_y: -1, text: Teams}
+    text_color:
+      colors: [red, blue, green]
+      pos_rel_x: 1
+      pos_rel_y: 0
+      title: {pos_rel_x: 1, pos_rel_y: -1, text: Textfarbe}
+  game_plan:
+    base_pos: {pos_x: 0, pos_y: 6}
+    title: {pos_rel_x: 0, pos_rel_y: 0, text: ''}
+  tournament:
+    rel_pos: {pos_rel_x: 0, pos_rel_y: 1}
+    title: {pos_rel_x: 0, pos_rel_y: 0, text: Turnier $0}
+    columns:
+      rel_pos: {pos_rel_x: 0, pos_rel_y: 2}
+      column:
+        - {type: away_team, pos_rel_x: 5, pos_rel_y: -1, text: Team 2}
+        - {type: away_team_text_color, pos_rel_x: 6, pos_rel_y: -1, text: Text Color}
+        - {type: end_time, pos_rel_x: 2, pos_rel_y: -1, text: Endzeit}
+        - {type: field_name, pos_rel_x: 7, pos_rel_y: -1, text: Feld}
+        - {type: field_type, pos_rel_x: 8, pos_rel_y: -1, text: Spielfeld}
+        - {type: home_team, pos_rel_x: 3, pos_rel_y: -1, text: Team 1}
+        - {type: home_team_text_color, pos_rel_x: 4, pos_rel_y: -1, text: Textfarbe}
+        - {type: pause_teams, pos_rel_x: 9, pos_rel_y: -1, text: Pause}
+        - {type: pause_teams_text_color, pos_rel_x: 10, pos_rel_y: -1, text: Textfarbe}
+        - {type: round, pos_rel_x: 0, pos_rel_y: -1, text: Runde}
+        - {type: start_time, pos_rel_x: 1, pos_rel_y: -1, text: Startzeit}
+  statistic:
+    base_pos: {pos_x: 0, pos_y: 161}
+    title: {pos_rel_x: 0, pos_rel_y: 1, text: Statistik}
+    rows:
+      rel_pos: {pos_rel_x: 1, pos_rel_y: 2}
+      row:
+        - {type: away_games, pos_rel_x: 5, pos_rel_y: -1, text: Auswärts}
+        - {type: field_types, pos_rel_x: 6, pos_rel_y: -1, text: $0}
+        - {type: home_games, pos_rel_x: 4, pos_rel_y: -1, text: Heim}
+        - {type: max_games_same_team, pos_rel_x: 2, pos_rel_y: -1, text: Maximalwiederholung einer Paarung}
+        - {type: n_games, pos_rel_x: 0, pos_rel_y: -1, text: Anzahl Spiele}
+        - {type: n_same_pairing, pos_rel_x: 1, pos_rel_y: -1, text: Gesamtwiederholungen Paarungen}
+        - {type: same_club, pos_rel_x: 3, pos_rel_y: -1, text: Vereinsintern}

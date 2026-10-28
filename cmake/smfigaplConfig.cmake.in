@@ -1,0 +1,5 @@
+# The package of the smfigapl library: link smfigapl::smfigapl
+@PACKAGE_INIT@
+
+include("${CMAKE_CURRENT_LIST_DIR}/smfigaplTargets.cmake")
+check_required_components(smfigapl)

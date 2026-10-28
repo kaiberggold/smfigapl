@@ -1,0 +1,59 @@
+format_version: 1
+rounds: 8
+iterations: 2
+repeat_pairings: true
+home_away_balance: true
+optimize_round_order: true
+fields:
+  - {name: '1', type: Funino, subtype: Vorne}
+  - {name: '2', type: Jugendtore, subtype: Vorne}
+  - {name: '3', type: Funino, subtype: Vorne}
+  - {name: '4', type: Jugendtore, subtype: Vorne}
+  - {name: '5', type: Funino, subtype: Hinten}
+  - {name: '6', type: Jugendtore, subtype: Hinten}
+  - {name: '7', type: Funino, subtype: Hinten}
+  - {name: '8', type: Jugendtore, subtype: Hinten}
+clubs:
+  - name: A
+    teams: ['1', '2']
+  - name: B
+    teams: ['1', '2']
+  - name: C
+    teams: ['1', '2']
+  - name: D
+    teams: ['1', '2']
+  - name: E
+    teams: ['1', '2']
+  - name: F
+    teams: ['1', '2']
+  - name: G
+    teams: ['1', '2']
+  - name: H
+    teams: ['1', '2']
+conditions:
+  max_pauses: 3
+  max_same_club_games: 0
+  field_types:
+    - {type: Funino, min: 4, max: 4}
+    - {type: Jugendtore, min: 4, max: 4}
+  subtype_deny:
+    - subtype: Vorne
+      teams:
+        - {club: A, team: '2'}
+        - {club: B, team: '2'}
+        - {club: C, team: '2'}
+        - {club: D, team: '2'}
+        - {club: E, team: '2'}
+        - {club: F, team: '2'}
+        - {club: G, team: '2'}
+        - {club: H, team: '2'}
+    - subtype: Hinten
+      teams:
+        - {club: A, team: '1'}
+        - {club: B, team: '1'}
+        - {club: C, team: '1'}
+        - {club: D, team: '1'}
+        - {club: E, team: '1'}
+        - {club: F, team: '1'}
+        - {club: G, team: '1'}
+        - {club: H, team: '1'}

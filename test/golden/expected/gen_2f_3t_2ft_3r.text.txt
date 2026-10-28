@@ -1,0 +1,33 @@
+== exit code
+0
+== stdout
+
+Steps: 3
+
+== stderr
+
+== output file
+Round: 1
+                   North c1 : North c2                      
+                         -  : -                             
+                       Break: South c1
+
+Round: 2
+                         -  : -                             
+                   North c1 : South c1                      
+                       Break: North c2
+
+Round: 3
+                         -  : -                             
+                   North c2 : South c1                      
+                       Break: North c1
+
+Team:                         North c1                 North c2                 South c1                 
+Number of games               2                        2                        2                        
+Repeated Games                0                        0                        0                        
+Max Games same Team           1                        1                        1                        
+Same Club                     1                        1                        0                        
+Number of home games          2                        1                        0                        
+Number of away games          0                        1                        2                        
+T0                            1                        1                        0                        
+T1                            1                        1                        2                        

@@ -1,0 +1,43 @@
+== exit code
+0
+== stdout
+
+Steps: 15
+
+== stderr
+
+== output file
+Round: 1
+                   North c1 : North c2                      
+                   South c2 : South c3                      
+                   North c3 : South c1                      
+
+Round: 2
+                   North c1 : North c3                      
+                   North c2 : South c2                      
+                   South c1 : South c3                      
+
+Round: 3
+                   South c3 : North c2                      
+                   North c1 : South c1                      
+                   North c3 : South c2                      
+
+Round: 4
+                   South c2 : North c1                      
+                   North c2 : South c1                      
+                   North c3 : South c3                      
+
+Round: 5
+                   South c3 : North c1                      
+                   South c1 : South c2                      
+                   North c2 : North c3                      
+
+Team:                         North c1                 North c2                 North c3                 South c1                 South c2                 South c3                 
+Number of games               5                        5                        5                        5                        5                        5                        
+Repeated Games                0                        0                        0                        0                        0                        0                        
+Max Games same Team           1                        1                        1                        1                        1                        1                        
+Same Club                     2                        2                        2                        2                        2                        2                        
+Number of home games          3                        3                        3                        2                        2                        2                        
+Number of away games          2                        2                        2                        3                        3                        3                        
+T0                            4                        3                        5                        2                        2                        4                        
+T1                            1                        2                        0                        3                        3                        1                        

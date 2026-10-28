@@ -1,32 +1,37 @@
-set( gtest_force_shared_crt ON CACHE BOOL "Always use msvcrt.dll" FORCE)
-add_subdirectory("${PROJECT_SOURCE_DIR}/extern/googletest" "extern/googletest")
-set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-file(GLOB TEST_SRC
-       ${PROJECT_SOURCE_DIR}/test/cond_check/*.cpp
-       ${PROJECT_SOURCE_DIR}/test/input_val_check/*.cpp
-       ${PROJECT_SOURCE_DIR}/test/*.cpp
-       )
+file(GLOB_RECURSE TEST_SRC CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+# the texts of the command line tool only with the tool
+if(NOT SM_BUILD_CLI)
+    list(FILTER TEST_SRC EXCLUDE REGEX "/cli/")
+endif()
 add_executable(smtest ${TEST_SRC})
-set(LOCAL_PATH_STRING 	${PROJECT_SOURCE_DIR})
-configure_file(path.hpp.in path.hpp @ONLY)
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
-include_directories(${PROJECT_SOURCE_DIR}/test/)	
-set_target_properties(smtest PROPERTIES
-    CXX_STANDARD 17
-    CXX_STANDARD_REQUIRED OFF
-    CXX_EXTENSIONS OFF
-)
-target_link_libraries(smtest PUBLIC gtest)
-target_link_libraries(smtest PRIVATE sm_misc)
-target_link_libraries(smtest PRIVATE sm_in)
-target_link_libraries(smtest PRIVATE sm_out)
-target_link_libraries(smtest PRIVATE sm_val)
-target_link_libraries(smtest PRIVATE sm_search)
-target_link_libraries(smtest PRIVATE sm_ts)
-target_link_libraries(smtest PRIVATE sm_cond)
-target_link_libraries(smtest PRIVATE sm_stat)
-target_link_libraries(smtest PRIVATE sm_disp)
-target_link_libraries(smtest PRIVATE stopwatch)
-target_link_libraries(smtest PRIVATE sm_file)
-target_link_libraries(smtest PRIVATE sm_except)
-target_link_libraries(smtest PRIVATE cxxopts) 
+target_include_directories(smtest PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+# Configuration files used by the tests
+target_compile_definitions(smtest PRIVATE SM_TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/cfg_files" SM_SAMPLES_DIR="${PROJECT_SOURCE_DIR}/samples" SM_GOLDEN_DIR="${CMAKE_CURRENT_SOURCE_DIR}/golden")
+# MSVC deprecates std::getenv (used for SMFIGAPL_UPDATE_STEPS)
+if(MSVC)
+    target_compile_definitions(smtest PRIVATE _CRT_SECURE_NO_WARNINGS)
+endif()
+find_package(Threads REQUIRED)
+target_link_libraries(smtest PRIVATE GTest::gtest smfigapl_core $<TARGET_NAME_IF_EXISTS:smfigapl_cli> sm_options Threads::Threads)
+
+# Every test case is a CTest test (ctest in the build directory)
+include(GoogleTest)
+gtest_discover_tests(smtest DISCOVERY_TIMEOUT 120)
+# the golden tests run the command line tool
+if(SM_BUILD_CLI)
+    add_subdirectory(golden)
+endif()
+
+# Every public header compiles on its own (includes what it uses)
+file(GLOB_RECURSE PUBLIC_HEADERS RELATIVE ${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/include/smfigapl/*.hpp)
+list(APPEND PUBLIC_HEADERS smfigapl/version.hpp)
+set(HEADER_CHECKS)
+foreach(header ${PUBLIC_HEADERS})
+    string(MAKE_C_IDENTIFIER ${header} name)
+    set(source ${CMAKE_CURRENT_BINARY_DIR}/header_check/${name}.cpp)
+    file(CONFIGURE OUTPUT ${source} CONTENT "#include <${header}>\n")
+    list(APPEND HEADER_CHECKS ${source})
+endforeach()
+add_library(smfigapl_header_check STATIC ${HEADER_CHECKS})
+target_link_libraries(smfigapl_header_check PRIVATE smfigapl_types)
+add_dependencies(smtest smfigapl_header_check)

@@ -1,0 +1,31 @@
+format_version: 1
+rounds: 3
+iterations: 3
+repeat_pairings: true
+home_away_balance: true
+optimize_round_order: true
+fields:
+  - {name: '1', type: A, subtype: Left}
+  - {name: '2', type: A, subtype: Left}
+  - {name: '3', type: A, subtype: Left}
+  - {name: '4', type: A, subtype: Right}
+clubs:
+  - name: North
+    teams: [Red, Blue, Green, Black, White, Pink]
+  - name: South
+    teams: [Red, Blue]
+conditions:
+  max_same_club_games: 3
+  subtype_deny:
+    - subtype: Left
+      teams:
+        - {club: South, team: Red}
+        - {club: South, team: Blue}
+    - subtype: Right
+      teams:
+        - {club: North, team: Red}
+        - {club: North, team: Blue}
+        - {club: North, team: Green}
+        - {club: North, team: Black}
+        - {club: North, team: White}
+        - {club: North, team: Pink}

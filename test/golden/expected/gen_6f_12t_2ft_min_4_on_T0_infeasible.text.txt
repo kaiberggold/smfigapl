@@ -1,0 +1,12 @@
+== exit code
+0
+== stdout
+
+Steps: 0
+
+== stderr
+No game plan possible
+Field type T0 has 42 places, the minimums of the teams need 48
+
+== output file
+(no file)

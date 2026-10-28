@@ -1,0 +1,30 @@
+# clang-tidy configuration. Every finding is an error, the CI fails on it.
+# Disabled checks: style choices of this project or deliberate design
+# decisions.
+Checks: >
+  -*,
+  bugprone-*,
+  cppcoreguidelines-*,
+  modernize-*,
+  performance-*,
+  readability-*,
+  -modernize-use-trailing-return-type,
+  -readability-identifier-length,
+  -readability-braces-around-statements,
+  -performance-avoid-endl,
+  -cppcoreguidelines-avoid-magic-numbers,
+  -readability-magic-numbers,
+  -cppcoreguidelines-avoid-const-or-ref-data-members,
+  -cppcoreguidelines-non-private-member-variables-in-classes,
+  -performance-enum-size,
+  -bugprone-easily-swappable-parameters,
+  -readability-uppercase-literal-suffix,
+  -cppcoreguidelines-avoid-do-while,
+  -cppcoreguidelines-pro-bounds-constant-array-index
+# style choices:  trailing return types, short names (i, j, NRounds),
+#   braces around single statements, std::endl (flushes progress/debug output)
+# design:         references as members (Input&, ...), public data in plain
+#   structs (Capacity, Format, ...), std::array indexed like std::vector
+#   (the check only flags std::array; gsl::at / .at() would add checks)
+HeaderFilterRegex: '.*/src/.*|.*/include/smfigapl/.*'
+WarningsAsErrors: '*'

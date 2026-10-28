@@ -1,0 +1,73 @@
+# https://github.com/kaiberggold/smfigapl
+#
+# MIT License
+#
+# Copyright 2020 Kai Berggold
+#
+# Ein Setup des smfigapl-Spielplaners in YAML (https://yaml.org).
+# Die Schlüssel sind in docs/schema/setup.schema.json beschrieben; die
+# Schlüssel sind englisch, die Namen der Felder, Vereine und Teams frei.
+# Ein unbekannter Schlüssel wird mit einer Warnung ignoriert.
+# Das Layout der CSV-Ausgabe steht in einer eigenen Datei (format.yaml, Option -f).
+
+# Die Version des Formats dieser Datei
+format_version: 1
+# Anzahl der Runden (1-10)
+rounds: 6
+# Paarungen dürfen wiederholt werden (repeat_pairings: true), höchstens
+# iterations mal
+iterations: 1
+repeat_pairings: false
+# Heim und Gast tauschen, so dass jedes Team etwa gleich oft beides ist
+home_away_balance: true
+# Die Runden so ordnen, dass kein Team zwei Runden hintereinander pausiert
+# und kein Spiel in der nächsten Runde auf demselben Feld wiederholt wird
+optimize_round_order: true
+
+# Spielfelder (1-10), in der Reihenfolge des Plans. Jedes Feld hat
+# - name: der Name des Feldes im Plan
+# - type: der Feldtyp, für die Feldtyp-Bedingungen und die Ausgabe
+# - subtype: die Zuordnung; Teams können von den Feldern einer Zuordnung
+#   ausgeschlossen werden (subtype_deny); Zuordnungen, die kein Team teilt,
+#   bilden getrennte Subturniere
+fields:
+  - {name: '1', type: Small Goals, subtype: Left}
+  - {name: '2', type: Large Goals, subtype: Left}
+  - {name: '3', type: Small Goals, subtype: Right}
+  - {name: '4', type: Large Goals, subtype: Right}
+
+# Vereine (1-16), in der Reihenfolge des Plans. Jeder Verein hat
+# - name: für die Bedingung "gleicher Verein" und die Ausgabe
+# - teams: die Teams des Vereins, z. B. nach Trikotfarben
+clubs:
+  - name: North
+    teams: [Red, Green]
+  - name: South
+    teams: [Red, Blue]
+  - name: West
+    teams: [Red, Green]
+  - name: East
+    teams: [Red]
+
+# Bedingungen: der Plan erfüllt alle. Gibt es keinen Plan, die Grenzen
+# erweitern. Jede Paarung wird in jedem Fall einmal (oder iterations mal)
+# gespielt.
+conditions:
+  # Jedes Team pausiert in höchstens max_pauses Runden
+  max_pauses: 1
+  # Jedes Team spielt höchstens max_same_club_games Spiele gegen Teams des
+  # eigenen Vereins
+  max_same_club_games: 2
+  # In jeder Runde bleiben höchstens max_empty_fields Felder ohne Spiel
+  max_empty_fields: 1
+  # Jedes Team spielt min bis max Spiele auf den Feldern eines Typs (type:
+  # einer der Feldtypen der Felder; min oder max kann fehlen)
+  field_types:
+    - {type: Small Goals, min: 2, max: 3}
+    - {type: Large Goals, min: 2, max: 3}
+  # Teams, die nicht auf den Feldern einer Zuordnung spielen dürfen, z. B. für
+  # Subturniere:
+  # subtype_deny:
+  #   - subtype: Links
+  #     teams:
+  #       - {club: Norden, team: Rot}

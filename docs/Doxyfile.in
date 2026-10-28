@@ -1,0 +1,41 @@
+# The documentation of the public API (docs/CMakeLists.txt fills in the paths)
+PROJECT_NAME           = smfigapl
+PROJECT_NUMBER         = @PROJECT_VERSION@
+PROJECT_BRIEF          = "Game plans for small field tournaments"
+OUTPUT_DIRECTORY       = @CMAKE_CURRENT_BINARY_DIR@
+INPUT                  = @PROJECT_SOURCE_DIR@/docs/mainpage.md \
+                         @PROJECT_SOURCE_DIR@/docs/guides \
+                         @PROJECT_SOURCE_DIR@/include/smfigapl \
+                         @PROJECT_BINARY_DIR@/include/smfigapl/version.hpp
+FILE_PATTERNS          = *.hpp *.md
+RECURSIVE              = YES
+USE_MDFILE_AS_MAINPAGE = @PROJECT_SOURCE_DIR@/docs/mainpage.md
+STRIP_FROM_PATH        = @PROJECT_SOURCE_DIR@/include @PROJECT_BINARY_DIR@/include @PROJECT_SOURCE_DIR@/docs
+STRIP_FROM_INC_PATH    = @PROJECT_SOURCE_DIR@/include @PROJECT_BINARY_DIR@/include
+FULL_PATH_NAMES        = YES
+MARKDOWN_SUPPORT       = YES
+AUTOLINK_SUPPORT       = YES
+EXTRACT_ALL            = NO
+EXTRACT_PRIVATE        = NO
+HIDE_UNDOC_MEMBERS     = NO
+SHOW_INCLUDE_FILES     = YES
+SORT_MEMBER_DOCS       = NO
+QUIET                  = YES
+WARNINGS               = YES
+WARN_IF_UNDOCUMENTED   = YES
+WARN_IF_DOC_ERROR      = YES
+WARN_NO_PARAMDOC       = NO
+WARN_AS_ERROR          = FAIL_ON_WARNINGS
+GENERATE_LATEX         = NO
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html
+GENERATE_TREEVIEW      = YES
+DISABLE_INDEX          = NO
+FULL_SIDEBAR           = NO
+HTML_COLORSTYLE        = LIGHT
+HTML_EXTRA_STYLESHEET  = @SM_DOXYGEN_AWESOME_DIR@/doxygen-awesome.css \
+                         @SM_DOXYGEN_AWESOME_DIR@/doxygen-awesome-sidebar-only.css
+ENABLE_PREPROCESSING   = YES
+MACRO_EXPANSION        = NO
+HAVE_DOT               = NO
+EXCLUDE_SYMBOLS        = operator==

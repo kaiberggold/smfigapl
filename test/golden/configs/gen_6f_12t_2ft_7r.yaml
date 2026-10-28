@@ -1,0 +1,21 @@
+format_version: 1
+rounds: 7
+iterations: 1
+repeat_pairings: false
+home_away_balance: true
+optimize_round_order: true
+fields:
+  - {name: '1', type: T0, subtype: x}
+  - {name: '2', type: T1, subtype: x}
+  - {name: '3', type: T0, subtype: x}
+  - {name: '4', type: T1, subtype: x}
+  - {name: '5', type: T0, subtype: x}
+  - {name: '6', type: T1, subtype: x}
+clubs:
+  - name: North
+    teams: [c1, c2, c3, c4, c5, c6]
+  - name: South
+    teams: [c1, c2, c3, c4, c5, c6]
+conditions:
+  max_pauses: 1
+  max_empty_fields: 1

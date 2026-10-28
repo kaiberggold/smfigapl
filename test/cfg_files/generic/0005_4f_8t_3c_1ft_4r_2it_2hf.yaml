@@ -1,0 +1,34 @@
+format_version: 1
+rounds: 6
+iterations: 2
+repeat_pairings: true
+home_away_balance: true
+optimize_round_order: true
+fields:
+  - {name: '1', type: Funino, subtype: Vorne}
+  - {name: '2', type: Funino, subtype: Vorne}
+  - {name: '3', type: Funino, subtype: Hinten}
+  - {name: '4', type: Funino, subtype: Hinten}
+clubs:
+  - name: A
+    teams: ['1', '2']
+  - name: B
+    teams: ['1', '2']
+  - name: C
+    teams: ['1', '2']
+  - name: D
+    teams: ['1', '2']
+conditions:
+  subtype_deny:
+    - subtype: Vorne
+      teams:
+        - {club: A, team: '1'}
+        - {club: B, team: '1'}
+        - {club: C, team: '1'}
+        - {club: D, team: '1'}
+    - subtype: Hinten
+      teams:
+        - {club: A, team: '2'}
+        - {club: B, team: '2'}
+        - {club: C, team: '2'}
+        - {club: D, team: '2'}

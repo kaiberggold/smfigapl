@@ -1,0 +1,17 @@
+format_version: 1
+rounds: 5
+iterations: 1
+repeat_pairings: false
+home_away_balance: true
+optimize_round_order: true
+fields:
+  - {name: '1', type: Funino, subtype: Vorne}
+  - {name: '2', type: Jugendtore, subtype: Vorne}
+  - {name: '3', type: Funino, subtype: Vorne}
+clubs:
+  - name: A
+    teams: ['1', '2']
+  - name: B
+    teams: ['1', '2']
+  - name: C
+    teams: ['1', '2']

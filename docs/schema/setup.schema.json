@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/kaiberggold/smfigapl/docs/schema/setup.schema.json",
+  "title": "smfigapl setup",
+  "description": "The setup of a tournament for the smfigapl game planner (YAML adapter, format_version 1). The output layout may be in the same text (see layout.schema.json). The planner checks the values itself (numbers of rounds, fields and clubs, names used in the conditions).",
+  "type": "object",
+  "$defs": {
+    "name": {
+      "description": "A name; a number is read as text.",
+      "type": ["string", "integer"]
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    }
+  },
+  "properties": {
+    "format_version": {
+      "description": "The version of the format of the text (1).",
+      "type": "integer",
+      "minimum": 1
+    },
+    "rounds": {
+      "description": "The number of rounds.",
+      "$ref": "#/$defs/count"
+    },
+    "iterations": {
+      "description": "How often a pairing may be played (with repeat_pairings).",
+      "$ref": "#/$defs/count"
+    },
+    "repeat_pairings": {
+      "description": "Pairings may be played again, at most iterations times.",
+      "type": "boolean"
+    },
+    "home_away_balance": {
+      "description": "Swap home and away so that every team has about as many of both.",
+      "type": "boolean"
+    },
+    "optimize_round_order": {
+      "description": "Order the rounds so that no team pauses in two rounds in a row and no game repeats on a field in the next round.",
+      "type": "boolean"
+    },
+    "fields": {
+      "description": "The fields in the order of the plan.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {"description": "The name of the field in the plan.", "$ref": "#/$defs/name"},
+          "type": {"description": "The field type (for the field type conditions and the statistic).", "$ref": "#/$defs/name"},
+          "subtype": {"description": "The subtype (for the teams denied to it); fields of subtypes that no team shares form separate sub tournaments.", "$ref": "#/$defs/name"}
+        },
+        "required": ["name", "type", "subtype"]
+      }
+    },
+    "clubs": {
+      "description": "The clubs with their teams.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {"description": "The name of the club.", "$ref": "#/$defs/name"},
+          "teams": {
+            "description": "The names of its teams (e.g. the colors of their shirts), unique within the club.",
+            "type": "array",
+            "items": {"$ref": "#/$defs/name"}
+          }
+        },
+        "required": ["name", "teams"]
+      }
+    },
+    "conditions": {
+      "description": "The conditions of the plan; a missing key means no condition.",
+      "type": "object",
+      "properties": {
+        "max_pauses": {"description": "The most rounds a team pauses.", "$ref": "#/$defs/count"},
+        "max_same_club_games": {"description": "The most games of a team against teams of its own club.", "$ref": "#/$defs/count"},
+        "max_empty_fields": {"description": "The most empty fields in a round.", "$ref": "#/$defs/count"},
+        "field_types": {
+          "description": "Games per team on the fields of a type.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {"description": "The field type (a type of the fields).", "$ref": "#/$defs/name"},
+              "min": {"description": "At least this many games.", "$ref": "#/$defs/count"},
+              "max": {"description": "At most this many games.", "$ref": "#/$defs/count"}
+            },
+            "required": ["type"]
+          }
+        },
+        "subtype_deny": {
+          "description": "Teams that may not play on the fields of a subtype.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "subtype": {"description": "The subtype (a subtype of the fields).", "$ref": "#/$defs/name"},
+              "teams": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "club": {"description": "The name of the club.", "$ref": "#/$defs/name"},
+                    "team": {"description": "The name of the team within the club.", "$ref": "#/$defs/name"}
+                  },
+                  "required": ["club", "team"]
+                }
+              }
+            },
+            "required": ["subtype", "teams"]
+          }
+        }
+      }
+    }
+  },
+  "required": ["rounds", "fields", "clubs"]
+}

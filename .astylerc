@@ -1,0 +1,33 @@
+# Artistic Style (astyle) configuration, the same options as in icom2000.
+# Format all sources with
+#   astyle --options=.astylerc --suffix=none --recursive "src/*.cpp" "src/*.hpp" "apps/*.cpp" "test/*.cpp" "test/*.hpp"
+# The CI checks that the sources are formatted (astyle 3.1, Ubuntu 24.04).
+
+style=allman
+indent=spaces=4
+
+# case labels indented one level inside their switch
+indent-switches
+
+# namespace bodies are indented one level; access modifiers (public:,
+# private:) are not indented (astyle's default)
+indent-namespaces
+
+# keep short one-line getters/bodies as written, e.g.
+# `bool has(DebugFlag f) const { return ...; }`
+keep-one-line-blocks
+keep-one-line-statements
+
+# `char* argv`, `std::string& key`: pointer/reference bound to the type
+align-pointer=type
+align-reference=type
+
+# spacing: `if (x)`, `a + b`, `f(a, b)`, `f(a)`
+pad-header
+pad-oper
+pad-comma
+unpad-paren
+
+# no max-code-length: long lines are wrapped by hand
+
+convert-tabs

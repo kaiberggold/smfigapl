@@ -1,0 +1,12 @@
+== exit code
+0
+== stdout
+
+Steps: 0
+
+== stderr
+No game plan possible
+Team North c1 has to play at least 7 games, the club limit and the opponents allow only 5
+
+== output file
+(no file)

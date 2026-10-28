@@ -1,0 +1,60 @@
+== exit code
+0
+== stdout
+
+Steps: 513
+
+== stderr
+
+== output file
+Runde: 1
+                  North Red : North Green                   
+                   West Red : West Green                    
+                  South Red : South Blue                    
+                         -  : -                             
+                       Pause: East Red
+
+Runde: 2
+                   West Red : East Red                      
+                  North Red : South Red                     
+                         -  : -                             
+                North Green : South Blue                    
+                       Pause: West Green
+
+Runde: 3
+                North Green : South Red                     
+                 South Blue : North Red                     
+                         -  : -                             
+                   East Red : West Green                    
+                       Pause: West Red
+
+Runde: 4
+                  North Red : West Red                      
+                 West Green : North Green                   
+                         -  : -                             
+                  South Red : East Red                      
+                       Pause: South Blue
+
+Runde: 5
+                 West Green : North Red                     
+                North Green : West Red                      
+                         -  : -                             
+                 South Blue : East Red                      
+                       Pause: South Red
+
+Runde: 6
+                   East Red : North Green                   
+                         -  : -                             
+                 South Blue : West Green                    
+                  South Red : West Red                      
+                       Pause: North Red
+
+Team:                         North Red                North Green              South Red                South Blue               West Red                 West Green               East Red                 
+Anzahl Spiele                 5                        6                        5                        5                        5                        5                        5                        
+Spielwiederholungen           0                        0                        0                        0                        0                        0                        0                        
+Maximale Wiederholung         1                        1                        1                        1                        1                        1                        1                        
+Vereinsintern                 1                        1                        1                        1                        1                        1                        0                        
+Anzahl Heimspiele             3                        3                        3                        3                        2                        2                        2                        
+Anzahl Auswaertsspiele        2                        3                        2                        2                        3                        3                        3                        
+Small Goals                   3                        3                        2                        2                        2                        2                        2                        
+Large Goals                   2                        3                        3                        3                        3                        3                        3                        

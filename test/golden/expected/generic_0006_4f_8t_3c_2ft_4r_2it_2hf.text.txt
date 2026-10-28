@@ -1,0 +1,68 @@
+== exit code
+0
+== stdout
+
+Steps: 18
+
+== stderr
+
+== output file
+Tournament: 1
+Round: 1
+                        A 1 : B 1                           
+                        C 1 : D 1                           
+
+Round: 2
+                        D 1 : B 1                           
+                        C 1 : A 1                           
+
+Round: 3
+                        D 1 : A 1                           
+                        B 1 : C 1                           
+
+Round: 4
+                        C 1 : D 1                           
+                        A 1 : B 1                           
+
+Round: 5
+                        A 1 : C 1                           
+                        B 1 : D 1                           
+
+Round: 6
+                        B 1 : C 1                           
+                        D 1 : A 1                           
+
+Tournament: 2
+Round: 1
+                        A 2 : B 2                           
+                        C 2 : D 2                           
+
+Round: 2
+                        D 2 : B 2                           
+                        C 2 : A 2                           
+
+Round: 3
+                        D 2 : A 2                           
+                        B 2 : C 2                           
+
+Round: 4
+                        C 2 : D 2                           
+                        A 2 : B 2                           
+
+Round: 5
+                        A 2 : C 2                           
+                        B 2 : D 2                           
+
+Round: 6
+                        B 2 : C 2                           
+                        D 2 : A 2                           
+
+Team:                         A 1                      A 2                      B 1                      B 2                      C 1                      C 2                      D 1                      D 2                      
+Number of games               6                        6                        6                        6                        6                        6                        6                        6                        
+Repeated Games                3                        3                        3                        3                        3                        3                        3                        3                        
+Max Games same Team           2                        2                        2                        2                        2                        2                        2                        2                        
+Same Club                     0                        0                        0                        0                        0                        0                        0                        0                        
+Number of home games          3                        3                        3                        3                        3                        3                        3                        3                        
+Number of away games          3                        3                        3                        3                        3                        3                        3                        3                        
+Funino                        3                        3                        3                        3                        3                        3                        3                        3                        
+Jugendtore                    3                        3                        3                        3                        3                        3                        3                        3                        

@@ -1,0 +1,46 @@
+name: Documentation
+
+# The documentation of the public API (Doxygen): built on every push, an
+# undocumented part of the public API fails the build. Published on GitHub
+# Pages by the public repository from its branch main and its release tags
+# (Settings > Pages > Source: GitHub Actions).
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Doxygen
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install Doxygen
+        run: sudo apt-get update && sudo apt-get install -y doxygen
+      - name: Build the documentation
+        run: |
+          doxygen --version
+          cmake -S . -B build -DSM_BUILD_DOCS=ON -DSM_BUILD_TESTS=OFF -DSM_BUILD_CLI=OFF
+          cmake --build build --target docs
+      - name: Upload for GitHub Pages
+        if: github.repository == 'kaiberggold/smfigapl' && github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/docs/html
+
+  deploy:
+    name: GitHub Pages
+    needs: build
+    if: github.repository == 'kaiberggold/smfigapl' && github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

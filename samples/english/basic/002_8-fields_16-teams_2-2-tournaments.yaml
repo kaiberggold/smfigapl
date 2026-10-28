@@ -1,0 +1,97 @@
+# https://github.com/kaiberggold/smfigapl
+#
+# MIT License
+#
+# Copyright 2020 Kai Berggold
+#
+# A setup of the smfigapl game planner in YAML (https://yaml.org).
+# The keys are described in docs/schema/setup.schema.json. A key the
+# planner does not know is ignored with a warning.
+# The layout of the CSV output is in a separate file (format.yaml, option -f).
+
+# The version of the format of this file
+format_version: 1
+# Number of rounds to play (1-10)
+rounds: 8
+# Pairings may be played again (repeat_pairings: true), at most
+# iterations times
+iterations: 2
+repeat_pairings: true
+# Swap home and away so that every team has about as many of both
+home_away_balance: true
+# Order the rounds so that no team pauses in two rounds in a row and no
+# game repeats on a field in the next round
+optimize_round_order: true
+
+# Fields (1-10), in the order of the plan. Every field has
+# - name: the name of the field in the plan
+# - type: for the field type conditions and the output
+# - subtype: teams can be denied the fields of a subtype (subtype_deny);
+#   fields of subtypes that no team shares form separate sub tournaments
+fields:
+  - {name: '1', type: Funino, subtype: Vorne}
+  - {name: '2', type: Jugendtore, subtype: Vorne}
+  - {name: '3', type: Funino, subtype: Vorne}
+  - {name: '4', type: Jugendtore, subtype: Vorne}
+  - {name: '5', type: Funino, subtype: Hinten}
+  - {name: '6', type: Jugendtore, subtype: Hinten}
+  - {name: '7', type: Funino, subtype: Hinten}
+  - {name: '8', type: Jugendtore, subtype: Hinten}
+
+# Clubs (1-16), in the order of the plan. Every club has
+# - name: for the same club condition and the output
+# - teams: the teams of the club, e.g. by the colors of their shirts
+clubs:
+  - name: A
+    teams: ['1', '2']
+  - name: B
+    teams: ['1', '2']
+  - name: C
+    teams: ['1', '2']
+  - name: D
+    teams: ['1', '2']
+  - name: E
+    teams: ['1', '2']
+  - name: F
+    teams: ['1', '2']
+  - name: G
+    teams: ['1', '2']
+  - name: H
+    teams: ['1', '2']
+
+# Conditions: all of them hold in the plan. If there is no plan, widen the
+# limits. Every pairing is played once (or iterations times) in any case.
+conditions:
+  # Every team pauses in at most max_pauses rounds
+  max_pauses: 3
+  # Every team plays at most max_same_club_games games against teams of its
+  # own club
+  max_same_club_games: 0
+  # Every team plays min to max games on the fields of a type (type: one of
+  # the field types of the fields; min or max can be left out)
+  field_types:
+    - {type: Funino, min: 4, max: 4}
+    - {type: Jugendtore, min: 4, max: 4}
+  # Teams that may not play on the fields of a subtype, e.g. to form sub
+  # tournaments
+  subtype_deny:
+    - subtype: Vorne
+      teams:
+        - {club: A, team: '2'}
+        - {club: B, team: '2'}
+        - {club: C, team: '2'}
+        - {club: D, team: '2'}
+        - {club: E, team: '2'}
+        - {club: F, team: '2'}
+        - {club: G, team: '2'}
+        - {club: H, team: '2'}
+    - subtype: Hinten
+      teams:
+        - {club: A, team: '1'}
+        - {club: B, team: '1'}
+        - {club: C, team: '1'}
+        - {club: D, team: '1'}
+        - {club: E, team: '1'}
+        - {club: F, team: '1'}
+        - {club: G, team: '1'}
+        - {club: H, team: '1'}

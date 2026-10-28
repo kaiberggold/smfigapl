@@ -1,0 +1,61 @@
+== exit code
+0
+== stdout
+
+Steps: 455
+
+== stderr
+
+== output file
+Turnier: 1
+Runde: 1
+                 Norden Rot : Norden Grün                   
+                 Westen Rot : Westen Grün                   
+                 Süden Blau : Süden Gelb                    
+              Osten Violett : Osten Grau                    
+
+Runde: 2
+                 Westen Rot : Osten Violett                 
+                 Norden Rot : Süden Blau                    
+                Westen Grün : Osten Grau                    
+                Norden Grün : Süden Gelb                    
+
+Runde: 3
+                Norden Grün : Süden Blau                    
+                 Norden Rot : Süden Gelb                    
+                 Westen Rot : Osten Grau                    
+                Westen Grün : Osten Violett                 
+
+Runde: 4
+                 Norden Rot : Westen Rot                    
+                Norden Grün : Westen Grün                   
+                 Süden Gelb : Osten Grau                    
+                 Süden Blau : Osten Violett                 
+
+Runde: 5
+                 Süden Gelb : Osten Violett                 
+                Westen Grün : Norden Rot                    
+                Norden Grün : Westen Rot                    
+                 Osten Grau : Süden Blau                    
+
+Runde: 6
+                 Süden Gelb : Westen Grün                   
+                 Osten Grau : Norden Grün                   
+              Osten Violett : Norden Rot                    
+                 Süden Blau : Westen Rot                    
+
+Runde: 7
+              Osten Violett : Norden Grün                   
+                 Osten Grau : Norden Rot                    
+                 Süden Blau : Westen Grün                   
+                 Süden Gelb : Westen Rot                    
+
+Team:                         Norden Rot               Norden Grün              Süden Blau               Süden Gelb               Westen Rot               Westen Grün              Osten Violett            Osten Grau               
+Anzahl Spiele                 7                        7                        7                        7                        7                        7                        7                        7                        
+Spielwiederholungen           0                        0                        0                        0                        0                        0                        0                        0                        
+Maximale Wiederholung         1                        1                        1                        1                        1                        1                        1                        1                        
+Vereinsintern                 1                        1                        1                        1                        1                        1                        1                        1                        
+Anzahl Heimspiele             4                        4                        4                        4                        3                        3                        3                        3                        
+Anzahl Auswaertsspiele        3                        3                        3                        3                        4                        4                        4                        4                        
+Kleinfeldtore                 3                        4                        3                        4                        4                        3                        4                        3                        
+Jugendtore                    4                        3                        4                        3                        3                        4                        3                        4                        

@@ -1,0 +1,60 @@
+== exit code
+0
+== stdout
+
+Steps: 455
+
+== stderr
+
+== output file
+Round: 1
+                  North Red : North Green                   
+                   West Red : West Green                    
+                 South Blue : South Yellow                  
+                East Indigo : East Grew                     
+
+Round: 2
+                   West Red : East Indigo                   
+                  North Red : South Blue                    
+                 West Green : East Grew                     
+                North Green : South Yellow                  
+
+Round: 3
+                North Green : South Blue                    
+                  North Red : South Yellow                  
+                   West Red : East Grew                     
+                 West Green : East Indigo                   
+
+Round: 4
+                  North Red : West Red                      
+                North Green : West Green                    
+               South Yellow : East Grew                     
+                 South Blue : East Indigo                   
+
+Round: 5
+               South Yellow : East Indigo                   
+                 West Green : North Red                     
+                North Green : West Red                      
+                  East Grew : South Blue                    
+
+Round: 6
+               South Yellow : West Green                    
+                  East Grew : North Green                   
+                East Indigo : North Red                     
+                 South Blue : West Red                      
+
+Round: 7
+                East Indigo : North Green                   
+                  East Grew : North Red                     
+                 South Blue : West Green                    
+               South Yellow : West Red                      
+
+Team:                         North Red                North Green              South Blue               South Yellow             West Red                 West Green               East Indigo              East Grew                
+Number of games               7                        7                        7                        7                        7                        7                        7                        7                        
+Repeated Games                0                        0                        0                        0                        0                        0                        0                        0                        
+Max Games same Team           1                        1                        1                        1                        1                        1                        1                        1                        
+Same Club                     1                        1                        1                        1                        1                        1                        1                        1                        
+Number of home games          4                        4                        4                        4                        3                        3                        3                        3                        
+Number of away games          3                        3                        3                        3                        4                        4                        4                        4                        
+Small Goals                   3                        4                        3                        4                        4                        3                        4                        3                        
+Large Goals                   4                        3                        4                        3                        3                        4                        3                        4                        

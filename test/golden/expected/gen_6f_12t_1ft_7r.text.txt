@@ -1,0 +1,73 @@
+== exit code
+0
+== stdout
+
+Steps: 703
+
+== stderr
+
+== output file
+Round: 1
+                   North c1 : North c2                      
+                   North c3 : North c4                      
+                   North c5 : North c6                      
+                   South c1 : South c2                      
+                   South c3 : South c4                      
+                   South c5 : South c6                      
+
+Round: 2
+                   North c3 : North c1                      
+                   North c2 : North c4                      
+                   North c5 : South c1                      
+                   North c6 : South c2                      
+                   South c3 : South c5                      
+                   South c4 : South c6                      
+
+Round: 3
+                   North c1 : North c4                      
+                   North c2 : North c3                      
+                   South c2 : North c5                      
+                   North c6 : South c1                      
+                   South c3 : South c6                      
+                   South c4 : South c5                      
+
+Round: 4
+                   North c1 : North c5                      
+                   North c2 : North c6                      
+                   North c3 : South c3                      
+                   North c4 : South c4                      
+                   South c5 : South c1                      
+                   South c6 : South c2                      
+
+Round: 5
+                   North c1 : North c6                      
+                   North c2 : North c5                      
+                   South c4 : North c3                      
+                   North c4 : South c3                      
+                   South c6 : South c1                      
+                   South c5 : South c2                      
+
+Round: 6
+                   South c1 : North c1                      
+                   South c2 : North c2                      
+                   North c3 : South c5                      
+                   North c4 : South c6                      
+                   North c5 : South c3                      
+                   North c6 : South c4                      
+
+Round: 7
+                   South c2 : North c1                      
+                   South c1 : North c2                      
+                   South c6 : North c3                      
+                   North c4 : South c5                      
+                   North c5 : South c4                      
+                   North c6 : South c3                      
+
+Team:                         North c1                 North c2                 North c3                 North c4                 North c5                 North c6                 South c1                 South c2                 South c3                 South c4                 South c5                 South c6                 
+Number of games               7                        7                        7                        7                        7                        7                        7                        7                        7                        7                        7                        7                        
+Repeated Games                0                        0                        0                        0                        0                        0                        0                        0                        0                        0                        0                        0                        
+Max Games same Team           1                        1                        1                        1                        1                        1                        1                        1                        1                        1                        1                        1                        
+Same Club                     5                        5                        3                        3                        3                        3                        3                        3                        3                        3                        5                        5                        
+Number of home games          4                        4                        4                        4                        4                        4                        3                        3                        3                        3                        3                        3                        
+Number of away games          3                        3                        3                        3                        3                        3                        4                        4                        4                        4                        4                        4                        
+T0                            7                        7                        7                        7                        7                        7                        7                        7                        7                        7                        7                        7                        

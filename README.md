@@ -34,6 +34,7 @@ Usage:
   -e, --debugoptions arg   Debug Options
   -w, --stopwatch          Enable Stopwatch
   -m, --maxsteps N         Maximum search steps
+      --timelimit SECONDS  Maximum search time in seconds
   -p, --progress           Print Progress
   -s, --statistic          Print Statistic (For text output)
   -t, --text               Simple Text Output
@@ -44,133 +45,145 @@ Usage:
   -o, --output FILE        Output File
 ```
 
-# cfg-Files
-Teams, Fields, conditions etc. are defined in a config File, which useses the [Toml format](https://github.com/toml-lang/toml). Basic sample Files are located in the folder samples/basic (or samples/german/basic). The files hav then extension *.toml*. 
-Output format file may be in seperate file (-f) option, to allow the usage of one format file for different cfg-Files. 
+Without a game plan the tool says why (on stderr):
+- *No game plan possible*: proven, with the reason, e.g. "Field type T0 has
+  28 places, the minimums of the teams need 32" (found by counting before
+  the search) or "The search tried all possibilities".
+- *Search aborted (limit reached)*: the step limit (`-m`, 10 million by
+  default) or the time limit (`--timelimit`) stopped the search before it
+  found a plan or proved that there is none. The plan shows where it stopped.
 
-# Example cfg-File
+# Configuration files
+Teams, fields, conditions etc. are defined in a configuration file in [YAML](https://yaml.org) (*.yaml*). Sample files are in *samples/english/basic* and *samples/german/basic*. The keys are English and lower case; the names of fields, clubs and teams are free. The schemas *docs/schema/setup.schema.json* and *docs/schema/layout.schema.json* describe every key (many editors use them for completion and checks, e.g. with a first line `# yaml-language-server: $schema=...`).
+The output layout of the CSV file may be in a separate file (option `-f`), so that one layout serves several configurations.
+
+# Example configuration
+```yaml
+# Number of rounds to play (1-10)
+rounds: 7
+
+# Fields (1-10), in the order of the plan:
+# - name: the name of the field in the plan
+# - type: for the field type conditions and the output
+# - subtype: teams can be denied the fields of a subtype (subtype_deny);
+#   fields of subtypes that no team shares form separate sub tournaments
+fields:
+  - {name: '1', type: Small Goals, subtype: Left}
+  - {name: '2', type: Large Goals, subtype: Left}
+  - {name: '3', type: Small Goals, subtype: Right}
+  - {name: '4', type: Large Goals, subtype: Right}
+
+# Clubs (1-16), in the order of the plan:
+# - name: for the same club condition and the output
+# - teams: the teams of the club, e.g. by the colors of their shirts
+clubs:
+  - name: North
+    teams: [Red, Green]
+  - name: South
+    teams: [Red, Blue]
+  - name: West
+    teams: [Red, Green]
+  - name: East
+    teams: [Red, Black]
+
+# Conditions: all of them hold in the plan. If there is no plan, widen the
+# limits. Every pairing is played once (or `iterations` times) in any case.
+conditions:
+  # Every team pauses in at most max_pauses rounds
+  max_pauses: 1
+  # Every team plays at most max_same_club_games games against its own club
+  max_same_club_games: 2
+  # In every round at most max_empty_fields fields have no game
+  max_empty_fields: 1
+  # Every team plays min to max games on the fields of a type
+  field_types:
+    - {type: Small Goals, min: 3, max: 4}
+    - {type: Large Goals, min: 3, max: 4}
+  # Teams that may not play on the fields of a subtype, e.g. for sub tournaments
+  # subtype_deny:
+  #   - subtype: Left
+  #     teams:
+  #       - {club: North, team: Red}
 ```
-# Number of Rounds to play (Range: 1-10)
-rounds = 7
+Further keys: `repeat_pairings` and `iterations` (pairings played again), `home_away_balance`, `optimize_round_order` and `format_version` (see the samples and the schema).
 
-# Fields (Range: 1-10)
-# Fields are ordered in the order of definition.
-# For every field there are three fields:
-# - type: This is used for the fieldtype conditions, and for the output file
-# - subtype: Used to restrict certain teams to certain subtypes. Can be used two divide the tournamen in subtournaments, but is not restricted to that.
-# - name: The name of the filed used in the Output File
-   
-[[fields]]
-    type = "Small Goals"
-    subtype="Left"
-    name="1"
-[[fields]]
-    type = "Large Goals"
-    subtype="Left"
-    name="2"
-[[fields]]
-    type = "Small Goals"
-    subtype="Right"
-    name="3"
-[[fields]]
-    type = "Large Goals"
-    subtype="Right"
-    name="4"
-
-# Clubs (Range: 1-16)
-# Clubs are ordered in the order of definition.
-# For every field there are two fields:
-# - name: This is used for the same_club condition and for the output file
-# - colors: Defines the Teams within a Club. Typically these are colors corresponing to the trikot color, but theres no restriction to colors
-
-[[clubs]]
-    name = "North"
-    colors = [ 'Red', 'Green'] 
-[[clubs]]
-    name = "South"
-    colors = [ 'Red', 'Blue'] 
-[[clubs]]
-    name = "West"
-    colors = [ 'Red', 'Green'] 
-[[clubs]]
-    name = "East"
-    colors = [ 'Red', 'Black'] 
-    
-# Conditions
-# Side Conditions can be restricted by maximum / minimum Values. All conditions have to be fullfilled to obtain a valid gameplan 
-# If not solution is found, try to widen the windows between min an max values 
-# For some conditions, only one restricion is poassible
-# The Pairing condition is always active (every pairing may only occur once, or once every iteration.
-
-[conditions]
-	# Pause games: Only max Value. Every team has no more than max rounds without a game.
-    [conditions.pause_games]
-        max = 1
-    # Field types: Every Teams has within min/max Games on the specified fieldtype. "name" has to match on of the field types defined in the fields definitions.
-    [[conditions.field_types]]
-        name = "Small Goals"
-        min = 3
-        max = 4
-    [[conditions.field_types]]
-        name = "Large Goals"
-        min = 3
-        max = 4
-    # Same Club: Only max Value. Every Team has up to max games with teams which belong to the same club.
-    [conditions.same_club]
-        max = 2
-    # Only max. For every round there are only up to max fields, where is no game.
-    [conditions.empty_fields]
-        max = 1
-
-	# Sub Type conditions are used to restrict certain teams to a subset of the available fields. 
-	# The Restriction of  Subsets of Teams to a Subsets of fields may be used to obtain sub tournaments
-	# The teams_deny list has to habe am even number of strings, club + color for each team. 
-	#[[conditions.subtypes]]
-  	#name = "Left" 
-    #teams_deny = ['North', 'Red']
+# Errors
+Errors in the configuration (syntax errors, missing or invalid values, values out of range) are reported with an error number and a message in the chosen language on stderr, e.g.
 ```
+Error number13: Value missing: subtype
+```
+The exit code is the error number (0 if a game plan was found or the search ended without one). Wrong command line options also end with 1, like a syntax error.
 
 # Language support
-Specifier are defined in differen Languages, so far english (EN) and german (DE). See samples/german for german examples. Languages are defined in the class *sm_lang*. Toml itself is case sensitive, but here specifiers are accepted in three types of capitalization, e.g. rounds, Rounds, ROUNDS.
+The texts and messages are in English (EN) and German (DE), option `-l`. See *samples/german* for German examples; the keys of the configuration files are English in every language. The texts and messages of the command line tool are in *apps/cli/texts*; the library itself has no texts.
 
 # Build
-smfigapl is written in c++17 and uses the cmake build system. It builds with gcc (10.2.0), clang (10.0.1), and MSVC (??). A ```  cmake . and make ```   should be sufficient to build the code. It requires some external libraries, which are included as submodules:
-- [googletest](https://github.com/google/googletest) (for some basic automatic tests)
-- [toml++](https://github.com/marzer/tomlplusplus) (for parsing the configuration files)
-- [cxxopts](https://github.com/jarro2783/cxxopts) ( for parsing the commandline options)
-- [stopwatch](https://github.com/CrikeeIP/Stopwatch) ( for runtime measurement)
+smfigapl is written in c++20 and uses the cmake build system (3.20 or newer). It builds with gcc (13.3), clang (18) and MSVC (Visual Studio 2022). Build with
+```
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build
+```
+Warnings are enabled for the project code; `-DSM_WARNINGS_AS_ERRORS=ON` turns them into errors, `-DSM_BUILD_TESTS=OFF` skips the tests, `-DSM_BUILD_CLI=OFF` the command line tool. `cmake --install build --prefix <dir>` installs the library (public headers, `find_package(smfigapl)`); `-DSM_BUILD_DOCS=ON` adds the target `docs` (Doxygen, pages in *build/docs/html*).
+
+# Library
+The library can be used by other programs: `find_package(smfigapl)` or FetchContent, target `smfigapl::smfigapl`, headers *include/smfigapl/*. See *docs/guides/getting_started.md* (also in the generated documentation), the example *examples/consumer*, the versioning rules in *docs/guides/versioning.md* and the changes in *CHANGELOG.md*. The external libraries are downloaded by CMake (FetchContent) when configuring, so the first configure needs network access (see *extern/CMakeLists.txt* for the versions):
+- [googletest](https://github.com/google/googletest) 1.18 (for the tests)
+- [rapidyaml](https://github.com/biojppm/rapidyaml) 0.16 (for reading and writing the configuration files; compiled into the library)
+- [cxxopts](https://github.com/jarro2783/cxxopts) 3.3 (for parsing the commandline options)
+
+# Development
+- Formatting: [astyle](https://astyle.sourceforge.net/) with *.astylerc*:
+  `astyle --options=.astylerc --suffix=none --recursive "src/*.cpp" "src/*.hpp" "include/*.hpp" "apps/*.cpp" "apps/*.hpp" "test/*.cpp" "test/*.hpp" "tools/*.cpp"`.
+  `git config blame.ignoreRevsFile .git-blame-ignore-revs` makes git blame skip the formatting commit.
+- Static analysis: clang-tidy with *.clang-tidy* (configure with `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON`, then `clang-tidy -p build FILE`). Every finding is an error, the CI checks all files in *src/*, *apps/* and *test/* (*test/.clang-tidy* turns off two checks for the tests).
+- Naming: classes and functions in `camelCase`/`PascalCase` without prefix (namespace `smfigapl`), private members end with `_`, counts start with `N` (`NRounds`).
+- CI (*.github/workflows/ci.yml*): formatting check, build and tests with GCC, Clang, GCC with ASan/UBSan, GCC with ThreadSanitizer and MSVC, the library for Android (NDK) and iOS, the CMake package and FetchContent, clang-tidy. *docs.yml*: the documentation (an undocumented public API is an error), published on GitHub Pages.
 
 # Test
-Automatic regressions tests are performed via google test. The test use cfg-Files and check the output of the sm_search class. The condition checks use the results of the sm_stat class to check, if the defined conditons are fullfilled. They also check the number of searchsteps in comparison to a stored value for each test. The second set of tests check the input validation and the error messages.
+The tests use googletest and are registered with CTest: run `ctest` in the build directory (or `bin/smtest` directly).
+- *test/contract*: the public API on setups built in code (every condition, sub tournaments, statuses, problems with paths, determinism) and on the configuration files in *test/cfg_files/generic*: the conditions hold and the number of search steps does not grow beyond *steps.yaml* (with `SMFIGAPL_UPDATE_STEPS=1` a lower number is written back).
+- *test/api*: the public types, the planner (limits, cancellation, progress, log, threads), the setup validation.
+- *test/formats*: the YAML adapter, with round trip tests that every format adapter has to pass.
+- *test/report*: the statistic and the text and CSV writers.
+- *test/cli*: the texts and messages of the command line tool.
+- *test/model*, *test/io*, *test/solver*, *test/search_output*: unit tests of the internals. Configurations are read from strings (*test/test_setup.hpp*); the condition tests solve small configurations and recount the result from the game plan.
+- *test/golden*: the command line tool on known configurations, its whole output compared with *test/golden/expected* (`cmake --build build --target golden_update` writes them again after a reviewed change).
 
 # Configuration
-There are some configration defines :
-- SM_DBG: Activate debug code 
-- SM_JUMP_FAST_LEVELDOWN: Activate Jump prediction when going to next search level (should be on, only for debugging)
-- SM_FAST_JUMP: Activate Jump prediction (should be on, only for debugging)
-- SM_MAX_FT_JUMP: jump prediction for fieldtypes  (should be on, only for debugging)
-- SM_DEFAULT_LANGUAGE "DE" : The default Language
-- SM_CATCH_ALL: catch all exceptions with a standard error text
-- SM_STREAM_STDIN read input file from stdin (default off)
+There are some compile time settings:
+- *jumpFastLevelDown*, *fastJump*, *maxFieldTypeJump* (*sm_search_types.hpp*): jump predictions of the tree search. They should be on, switch them off only for debugging.
+- *defaultLanguage* (*apps/cli/texts.hpp*): the default language, "DE".
+- *readStdInWithoutArguments* (*apps/smfigapl.cpp*): read the configuration from stdin when the tool is started without arguments, instead of printing the help (default off). Without an input file (-i) the configuration is always read from stdin.
+
+Debug output is switched at runtime with -d and -e (debug flags).
+
+# Code structure
+The library has a public API in *include/smfigapl/* (namespace `smfigapl`): the setup, the result, the statistic, the output layout, the problems (`Result`, `Problem`), the planner (`validate`, `solve`, `computeStatistic`), the YAML adapter (*formats/yaml.hpp*) and the output writers (*report/*). An application links the target `smfigapl::smfigapl` and sees only these headers. The command line tool (*apps/*) uses the public API only; its texts are its own (*apps/cli*).
+
+Inside, the code is split into layers. Each layer is a library in its own folder under *src/*, with its internal headers in *src/LAYER/include/smfigapl/LAYER/*. A layer can only include the headers of the layers it depends on, so a dependency in the wrong direction does not compile.
+
+| Layer | Library | Content | Depends on |
+|---|---|---|---|
+| types | smfigapl_types | the public types (*include/smfigapl*), the version | - |
+| model | smfigapl_model | input (*sm_in*), the setup to the input (*sm_setup*: validation, `buildInput`), output and search results (*sm_out*), game plans by index (*sm_indexed*), sizes and mappings (*sm_capacity*), basic types and limits (*sm_types*), error codes (*sm_error_codes*), debug log on a `LogSink` (*sm_debug*), helpers (*sm_math*), errors (*sm_except*) | types |
+| formats | smfigapl_formats | the YAML adapter: setup and layout to and from text | types, rapidyaml |
+| solver | smfigapl_solver | sub tournaments (*sm_atomic*), candidate rounds (*sm_ts*) and their condition tables (*sm_tables*), conditions (*sm_cond*), tree search (*sm_search*), game plan of the result (*sm_search_result*), search state (*sm_search_types*) | model |
+| api | smfigapl_api | the planner: `validate`, `solve`, `computeStatistic` | types (model, solver private) |
+| report | smfigapl_report | the text and CSV writers | types |
+
+*smfigapl_core* combines all internal layers for the unit tests and the benchmark tool.
 
 # Algorithm
-- input file is read in *sm_file*, and and a representions of teams, fields, etc. based on numeric indices is calculated and stored in *sm_in*, as well as settings, mapping to the string based representation, etc. 
-- input data shall be validated in sm_val, this is very basic so far.
+- The YAML adapter reads the configuration into the public setup (`TournamentSetup`); `validateSetup` checks it, `buildInput` calculates a representation of teams, fields, etc. based on numeric indices (*sm_in*), with the mapping to the names.
 - the algorithm is basically a treesearch done in *sm_search*. All possible combinations for a round are calculated in *sm_ts*. Here, the Teams, fields are transformed to a  normalized  gameplan, where the number of teams is equal to to number of fields, and the fields are sorted that fieldtypes are grouped. Additional virtual teams /fields /fieldtype are used to fill up the gameplan. Then all principle possible pertubations are calculated. Home-Away positions are ignore here. 
-- Conditions are calculated differentially during the tree search, to do as less calculations as possbible during the treesearch. The Tables used for the counters are precalculated in sm_search and sm_cond. 
+- Conditions are calculated differentially during the tree search, to do as less calculations as possbible during the treesearch. The tables used for the counters are precalculated in *sm_tables* (`RoundTables`), the counters are in *sm_cond*. 
 - The normalized order off the pertubations is used to calc jump tables, which are used to go fast forward in the treesearch if it is know from the current conditons the following steps won't match the conditions too.
 - When all conditions are fullfilled, the search is stopped. The resulting gameplan is optimized to obtain a equl home/away distribution, and to avoid game repetitions in a row ( if repetitions are allowed).
-- Finally gameplan is transformed back to a "named" gameplan with the original output mapping, statistics are calculated in *sm_stat*, an gameplan is printed in *sm_disp*.
-- exceptions (invalid files, values out of range, not solvables conditions, etc.) are handled in *sm_except*.
-- various classes needed in different context are defined in *sm_misc*
-
-# Todo
-- better input validation (error messaging, detect unsolvable conditions directly)
-- more tests (input validations, special cases)
-- better integration in spreadsheet tool.
+- Finally the gameplan is transformed back to the public game plan by name (`SolveResult`); the statistic is calculated from it (`computeStatistic`) and the writers print it (*src/report*).
+- Errors of the input are problems with a code, values and the path in the setup; the command line tool turns them into messages.
 
 # Contribute
-Are welcome. For Bug reports please attach cfg-File. 
+Ideas and bug reports are welcome as issues (for a bug please attach the cfg file); see [CONTRIBUTING.md](CONTRIBUTING.md) for pull requests.
 
 # License
 
