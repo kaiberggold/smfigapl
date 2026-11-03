@@ -17,4 +17,8 @@ target_include_directories(smfigapl_types PUBLIC
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 # users of the library need C++20, not the warning settings of the project
 target_compile_features(smfigapl_types PUBLIC cxx_std_20)
+# and std::stop_token, with the option some standard libraries still need
+# (cmake/stop_token.cmake)
+target_compile_options(smfigapl_types PUBLIC ${SM_STOP_TOKEN_OPTIONS})
+target_link_options(smfigapl_types PUBLIC ${SM_STOP_TOKEN_OPTIONS})
 target_link_libraries(smfigapl_types PRIVATE $<BUILD_INTERFACE:sm_options>)

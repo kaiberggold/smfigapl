@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 3.20)
-project(smfigapl VERSION "0.5.0" LANGUAGES CXX)
+project(smfigapl VERSION "0.6.0" LANGUAGES CXX)
 # The prerelease mark of the development line ("devel"); empty in a
 # release. The development build N is the tag vX.Y.Z-devel.N of the commit
 # (cmake/version.cmake).
 set(SM_VERSION_PRERELEASE "")
 include(cmake/version.cmake)
+include(cmake/stop_token.cmake)
 
 # The tests, the command line tool and the install rules only when
 # smfigapl is the main project, not when an application adds it

@@ -1,12 +1,19 @@
 name: CI
 
+# In the public repository on every push and pull request. In the
+# development repository only when started by hand (workflow_dispatch,
+# also as a part of another workflow): the checks run locally there, and
+# the hosted minutes are kept for the step before a release.
 on:
   push:
   pull_request:
+  workflow_dispatch:
+  workflow_call:
 
 jobs:
   format:
     name: Formatting (astyle)
+    if: github.repository == 'kaiberggold/smfigapl' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v5
@@ -26,6 +33,7 @@ jobs:
   # YAML format (docs/schema), so that the schemas stay true
   schema:
     name: YAML schemas
+    if: github.repository == 'kaiberggold/smfigapl' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v5
@@ -39,6 +47,7 @@ jobs:
 
   build:
     name: ${{ matrix.name }}
+    if: github.repository == 'kaiberggold/smfigapl' || github.event_name == 'workflow_dispatch'
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -91,6 +100,7 @@ jobs:
   # application builds and runs both ways
   package:
     name: CMake package and FetchContent
+    if: github.repository == 'kaiberggold/smfigapl' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v5
@@ -101,7 +111,8 @@ jobs:
           cmake --install build --prefix "$PWD/install"
       - name: Example with find_package
         run: |
-          cmake -S examples/consumer -B consumer-package -DSMFIGAPL_FIND_PACKAGE=ON -DCMAKE_PREFIX_PATH="$PWD/install"
+          version=$(sed -n 's/^project(smfigapl VERSION "\([0-9.]*\)".*/\1/p' CMakeLists.txt)
+          cmake -S examples/consumer -B consumer-package -DSMFIGAPL_FIND_PACKAGE=ON -DCMAKE_PREFIX_PATH="$PWD/install" -DSMFIGAPL_VERSION="$version"
           cmake --build consumer-package --parallel
           ./consumer-package/consumer
       - name: Example with FetchContent
@@ -115,6 +126,7 @@ jobs:
   # need a device or an emulator)
   android:
     name: Android NDK (${{ matrix.abi }})
+    if: github.repository == 'kaiberggold/smfigapl' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
@@ -133,7 +145,10 @@ jobs:
 
   ios:
     name: iOS (${{ matrix.sdk }})
-    runs-on: macos-latest
+    if: github.repository == 'kaiberggold/smfigapl' || github.event_name == 'workflow_dispatch'
+    # a fixed image instead of macos-latest: in November 2026 jobs on
+    # macos-latest hung, assigned to a runner that never came online
+    runs-on: macos-15
     strategy:
       fail-fast: false
       matrix:
@@ -152,6 +167,7 @@ jobs:
 
   clang-tidy:
     name: clang-tidy
+    if: github.repository == 'kaiberggold/smfigapl' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v5

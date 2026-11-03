@@ -5,6 +5,14 @@ first release with the library API; v0.0.1 (2021) was the command line
 tool alone.
 Complete rework, c++20, static code checks, solid principles, cleanup
 
+## [0.6.0] - 2026-11-03
+
+### Library
+- Builds with a libc++ older than version 20, e.g. the Android NDK r27
+  that React Native uses: `std::stop_token` is still experimental there,
+  so CMake adds `-fexperimental-library` for the library and the targets
+  that link it.
+
 ## [0.5.0] - 2026-10-28
 
 The first version with a public API.

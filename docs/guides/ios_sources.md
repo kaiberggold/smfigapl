@@ -19,6 +19,8 @@ podspec of the app's module needs the sources of a tag.
   *src/c4/yml/\*.cpp* and *ext/c4core.src/c4/\*.cpp*, with *src* and
   *ext/c4core.src* as include paths and `RYML_WITH_TAB_TOKENS` defined);
 - C++20, no other dependencies; no global state (several searches at once).
+- with libc++ before version 20, `-fexperimental-library` for every file
+  that includes *planner.hpp* (`std::stop_token`; *cmake/stop_token.cmake*).
 
 ## Options
 

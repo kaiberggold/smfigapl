@@ -3,10 +3,14 @@ name: Documentation
 # The documentation of the public API (Doxygen): built on every push, an
 # undocumented part of the public API fails the build. Published on GitHub
 # Pages by the public repository from its branch main and its release tags
-# (Settings > Pages > Source: GitHub Actions).
+# (Settings > Pages > Source: GitHub Actions). In the development
+# repository only when started by hand (also as a part of another
+# workflow), like the CI.
 on:
   push:
   pull_request:
+  workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: read
@@ -14,6 +18,7 @@ permissions:
 jobs:
   build:
     name: Doxygen
+    if: github.repository == 'kaiberggold/smfigapl' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v5

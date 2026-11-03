@@ -23,6 +23,15 @@ target_link_libraries(my_app PRIVATE smfigapl::smfigapl)
 
 *examples/consumer* is a complete project for both ways.
 
+`SolveOptions` holds a `std::stop_token`, which libc++ before version 20
+(e.g. the Android NDK r28 and older) still counts as experimental. CMake
+detects that and adds `-fexperimental-library` to the compile and link
+options of `smfigapl::smfigapl`, so the files of the application that
+include *planner.hpp* get it too. Version 0.5.0 does not do this yet: with
+such a libc++, add the option yourself (before `FetchContent_MakeAvailable`:
+`add_compile_options(-fexperimental-library)`, and the same as a link option
+of the target that links the library).
+
 ## The first game plan
 
 ```cpp
