@@ -18,7 +18,7 @@ else()
     include(FetchContent)
     FetchContent_Declare(smfigapl
         GIT_REPOSITORY https://github.com/kaiberggold/smfigapl.git
-        GIT_TAG v0.5.0
+        GIT_TAG v0.7.0
         GIT_SHALLOW TRUE)
     FetchContent_MakeAvailable(smfigapl)
 endif()

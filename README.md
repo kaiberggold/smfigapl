@@ -158,7 +158,7 @@ There are some compile time settings:
 Debug output is switched at runtime with -d and -e (debug flags).
 
 # Code structure
-The library has a public API in *include/smfigapl/* (namespace `smfigapl`): the setup, the result, the statistic, the output layout, the problems (`Result`, `Problem`), the planner (`validate`, `solve`, `computeStatistic`), the YAML adapter (*formats/yaml.hpp*) and the output writers (*report/*). An application links the target `smfigapl::smfigapl` and sees only these headers. The command line tool (*apps/*) uses the public API only; its texts are its own (*apps/cli*).
+The library has a public API in *include/smfigapl/* (namespace `smfigapl`): the setup, the result, the statistic, the output layout, the problems (`Result`, `Problem`), the planner (`validate`, `solve`, `computeStatistic`, `checkPlan`), the YAML adapter (*formats/yaml.hpp*) and the output writers (*report/*). An application links the target `smfigapl::smfigapl` and sees only these headers. The command line tool (*apps/*) uses the public API only; its texts are its own (*apps/cli*).
 
 Inside, the code is split into layers. Each layer is a library in its own folder under *src/*, with its internal headers in *src/LAYER/include/smfigapl/LAYER/*. A layer can only include the headers of the layers it depends on, so a dependency in the wrong direction does not compile.
 
@@ -168,7 +168,7 @@ Inside, the code is split into layers. Each layer is a library in its own folder
 | model | smfigapl_model | input (*sm_in*), the setup to the input (*sm_setup*: validation, `buildInput`), output and search results (*sm_out*), game plans by index (*sm_indexed*), sizes and mappings (*sm_capacity*), basic types and limits (*sm_types*), error codes (*sm_error_codes*), debug log on a `LogSink` (*sm_debug*), helpers (*sm_math*), errors (*sm_except*) | types |
 | formats | smfigapl_formats | the YAML adapter: setup and layout to and from text | types, rapidyaml |
 | solver | smfigapl_solver | sub tournaments (*sm_atomic*), candidate rounds (*sm_ts*) and their condition tables (*sm_tables*), conditions (*sm_cond*), tree search (*sm_search*), game plan of the result (*sm_search_result*), search state (*sm_search_types*) | model |
-| api | smfigapl_api | the planner: `validate`, `solve`, `computeStatistic` | types (model, solver private) |
+| api | smfigapl_api | the planner: `validate`, `solve`, `computeStatistic`, `checkPlan` (*check*) | types (model, solver private) |
 | report | smfigapl_report | the text and CSV writers | types |
 
 *smfigapl_core* combines all internal layers for the unit tests and the benchmark tool.

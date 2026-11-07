@@ -53,13 +53,21 @@ std::string smfigapl::GamePlanSearch::getTeamColorByTeamId(uint id)
 void smfigapl::GamePlanSearch::calcIndexedGamePlan()
 {
     smfigapl::IndexedRound round;
+    const uint NFields = condTables_.atomicCapacityArray[condTables_.atomicIndex].NFields;
+    // the candidates have their games in the order of the fields sorted by
+    // type: position p is the field getFieldTypeSortArray(p); field j needs
+    // the inverse
+    std::vector<uint> positionByField(NFields, 0);
+    for (uint p = 0; p < NFields; p++)
+        if (const uint field = ts_.getFieldTypeSortArray(p); field < NFields)
+            positionByField[field] = p;
     for (uint i = 0; i < condTables_.atomicCapacityArray[condTables_.atomicIndex].NRounds; i++)
     {
         round = tables_.candidate(treeSearchIndex_[i]);
-        for (uint j = 0; j < condTables_.atomicCapacityArray[condTables_.atomicIndex].NFields; j++)
+        for (uint j = 0; j < NFields; j++)
         {
             IndexedGame game;
-            game = round.getGame(ts_.getFieldTypeSortArray(j));
+            game = round.getGame(positionByField[j]);
             for (uint k = 0; k < 2; k++)
             {
                 IndexedTeam team = game.getTeamByGameId(k);

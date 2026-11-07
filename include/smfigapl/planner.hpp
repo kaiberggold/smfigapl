@@ -91,6 +91,17 @@ namespace smfigapl
     /// give the same result (apart from the duration).
     [[nodiscard]] Result<SolveResult> solve(const TournamentSetup& setup, const SolveOptions& options = {}) noexcept;
 
+    /// The conditions of setup that a given plan breaks, e.g. after manual
+    /// changes: the codes ProblemCode::planRounds to planOpenGame.
+    /// Errors when the plan does not fit the setup (rounds, fields, teams),
+    /// warnings for broken conditions; empty if the plan keeps them all.
+    /// Pauses are counted from the games (GamePlan::Round::pauses is not
+    /// read); the empty fields of a round are counted per sub tournament
+    /// (GamePlan::subTournaments, all fields when there are none), as the
+    /// search does. Home and away balance and the round order are goals of
+    /// the search, not conditions, and are not checked.
+    [[nodiscard]] std::vector<Problem> checkPlan(const TournamentSetup& setup, const GamePlan& plan) noexcept;
+
     /// The statistic of the game plan of a result of solve() for setup
     /// (empty numbers if the result has no plan).
     [[nodiscard]] Statistic computeStatistic(const TournamentSetup& setup, const SolveResult& result);

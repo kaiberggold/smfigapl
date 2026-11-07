@@ -76,6 +76,20 @@ namespace smfigapl
         impossibleOpponents = 306,        ///< parameters: team, games to play, opponents left
         impossibleSearch = 307,           ///< the search tried all possibilities
         impossibleGames = 308,            ///< parameters: places to fill, games possible
+        // conditions a given plan breaks (checkPlan(); teams as "club team",
+        // rounds counted from 1, paths in the plan, e.g. "rounds[2].games[1]")
+        planRounds = 400,          ///< error: the plan has another number of rounds; parameters: rounds of the plan, rounds of the setup
+        planFields = 401,          ///< error: a round's games do not match the fields; parameters: round, field of the plan, field of the setup (the numbers of games and fields when they differ)
+        planUnknownTeam = 402,     ///< error: a team that is not in the setup; parameters: team, round
+        planTeamTwice = 403,       ///< a team plays more than once in a round; parameters: team, round
+        planPauses = 404,          ///< a team pauses more often than allowed; parameters: team, pauses, allowed
+        planEmptyFields = 405,     ///< a round has more empty fields than allowed; parameters: round, empty fields, allowed
+        planSameClub = 406,        ///< a team plays its own club more often than allowed; parameters: team, games, allowed
+        planFieldTypeMin = 407,    ///< a team plays too few games on a field type; parameters: team, field type, games, minimum
+        planFieldTypeMax = 408,    ///< a team plays too many games on a field type; parameters: team, field type, games, maximum
+        planSubtypeDenied = 409,   ///< a team plays on a field of a subtype denied to it; parameters: team, field, round
+        planRepeatedPairing = 410, ///< two teams play each other more often than allowed; parameters: team, team, games, allowed
+        planOpenGame = 411,        ///< a game with one team only (the field counts as empty, the team as pausing); parameters: team, round
         internal = 900                    ///< an error inside the library; parameters: description
     };
 

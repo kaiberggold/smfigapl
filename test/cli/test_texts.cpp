@@ -84,7 +84,10 @@ TEST(cliTexts, everyProblemHasAMessage)
                     ProblemCode::nFieldsLt1, ProblemCode::nRoundsGtMax, ProblemCode::nRoundsLt1, ProblemCode::searchTooLarge,
                     ProblemCode::searchTooManyPairings, ProblemCode::maxLtMin, ProblemCode::impossibleFieldTypeMin, ProblemCode::impossibleFieldTypeMax,
                     ProblemCode::impossibleTeamFieldTypeMin, ProblemCode::impossibleTeamGames, ProblemCode::impossiblePauses,
-                    ProblemCode::impossibleSameClub, ProblemCode::impossibleOpponents, ProblemCode::impossibleSearch, ProblemCode::impossibleGames
+                    ProblemCode::impossibleSameClub, ProblemCode::impossibleOpponents, ProblemCode::impossibleSearch, ProblemCode::impossibleGames,
+                    ProblemCode::planRounds, ProblemCode::planFields, ProblemCode::planUnknownTeam, ProblemCode::planTeamTwice, ProblemCode::planPauses,
+                    ProblemCode::planEmptyFields, ProblemCode::planSameClub, ProblemCode::planFieldTypeMin, ProblemCode::planFieldTypeMax,
+                    ProblemCode::planSubtypeDenied, ProblemCode::planRepeatedPairing, ProblemCode::planOpenGame
                 })
             EXPECT_NE(lang.getErrorMessage(code), "") << l << " " << static_cast<int>(code);
     }

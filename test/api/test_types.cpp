@@ -60,6 +60,9 @@ TEST(publicTypes, problemCodesAreStable)
     static_assert(static_cast<int>(ProblemCode::maxLtMin) == 200);
     static_assert(static_cast<int>(ProblemCode::impossibleSearch) == 307);
     static_assert(static_cast<int>(ProblemCode::impossibleGames) == 308);
+    static_assert(static_cast<int>(ProblemCode::planRounds) == 400);
+    static_assert(static_cast<int>(ProblemCode::planRepeatedPairing) == 410);
+    static_assert(static_cast<int>(ProblemCode::planOpenGame) == 411);
     static_assert(static_cast<int>(ProblemCode::internal) == 900);
     SUCCEED();
 }

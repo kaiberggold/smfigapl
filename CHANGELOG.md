@@ -5,6 +5,19 @@ first release with the library API; v0.0.1 (2021) was the command line
 tool alone.
 Complete rework, c++20, static code checks, solid principles, cleanup
 
+## [0.7.0] - 2026-11-07
+
+### Library
+- `checkPlan(setup, plan)` checks a given game plan, e.g. one changed by
+  hand, against its setup: the conditions it breaks are problems with the
+  new codes 400 to 411 (errors when the plan does not fit the setup; a game
+  with one team is an open game).
+- Fixed: with fields whose types or subtypes alternate (not grouped by
+  type in the setup), the games of a round were put on the wrong fields,
+  so field type limits and denied subtypes could be broken in a plan
+  reported as solved. The pairings and pauses were right; now every game
+  is on the field the search chose for it. Plans of such setups change.
+
 ## [0.6.0] - 2026-11-03
 
 ### Library

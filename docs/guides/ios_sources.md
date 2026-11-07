@@ -24,7 +24,7 @@ podspec of the app's module needs the sources of a tag.
 
 ## Options
 
-1. **Podspec with the git tag** (`s.source = { :git => ..., :tag => 'v0.5.0' }`)
+1. **Podspec with the git tag** (`s.source = { :git => ..., :tag => 'v0.7.0' }`)
    and `source_files` / `header_mappings_dir` per layer; a
    `prepare_command` writes *version.hpp* (a short script, or
    `cmake -P` with the version from *CMakeLists.txt*). Simple, but the

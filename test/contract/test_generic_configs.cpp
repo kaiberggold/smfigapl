@@ -24,7 +24,7 @@
 
 // Contract: the plans of the generic test configurations keep every
 // condition of their setup, through the public API only (YAML adapter,
-// solve, computeStatistic). The step counts must not grow (steps.yaml;
+// solve, computeStatistic, checkPlan). The step counts must not grow (steps.yaml;
 // SMFIGAPL_UPDATE_STEPS=1 stores lower counts).
 
 #include <algorithm>
@@ -107,6 +107,8 @@ TEST_P(genericConfigs, conditionsKept)
     const GamePlan& plan = result->plan;
     const Statistic s = computeStatistic(*setup, *result);
     const Conditions& c = setup->conditions;
+    // the library's own check of a given plan agrees
+    EXPECT_EQ(checkPlan(*setup, plan), std::vector<Problem> {}) << file;
 
     ASSERT_EQ(plan.rounds.size(), setup->rounds) << file;
     for (const Round& round : plan.rounds)
