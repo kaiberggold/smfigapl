@@ -93,6 +93,9 @@ namespace smfigapl
         void countHomeAway(HomeAwayCount& count);
         // Swaps a game of the team with the most home (away) games
         void swapHomeAway(const HomeAwayCount& count, uint homeAway);
+        // true if every team has as many home as away games, one more of
+        // either with an odd number of games
+        [[nodiscard]] static bool homeAwayBalanced(const HomeAwayCount& count);
         // Tree search of the current atomic set
         void runTreeSearch();
         // error if the atomic set has too many pairings or candidates for the search (after ts_.prepare)
@@ -135,6 +138,8 @@ namespace smfigapl
         void setStopToken(std::stop_token token);
         void setProgressCallback(uint stepSize, ProgressCallback callback);
         [[nodiscard]] uint  getSteps();
+        // Swaps home and away of games of the atomic set until every team is
+        // balanced (homeAwayBalanced); a balanced plan stays as it is
         void balancedHomeAwayCalc();
         void dispNFailArray();
         void optimizeRounds();

@@ -193,6 +193,15 @@ TEST(contract, homeAwayBalance)
     const TournamentSetup s = make(7, {"A", "A", "A", "A"}, 4, 4);
     for (const TeamStatistic& t : computeStatistic(s, solved(s)).teams)
         EXPECT_LE(std::max(t.homeGames, t.awayGames) - std::min(t.homeGames, t.awayGames), 1u);
+    // with pauses: a team has fewer games than rounds, and it is the games
+    // that are split evenly (6 games: 3 at home, 3 away)
+    TournamentSetup paused = make(7, {"A", "A", "B"}, 4, 3);
+    paused.conditions.maxPauses = 1;
+    for (const TeamStatistic& t : computeStatistic(paused, solved(paused)).teams)
+    {
+        EXPECT_EQ(t.games, 6u) << t.team.club << " " << t.team.team;
+        EXPECT_EQ(t.homeGames, 3u) << t.team.club << " " << t.team.team;
+    }
 }
 
 TEST(contract, statuses)

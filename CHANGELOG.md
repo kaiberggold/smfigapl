@@ -5,6 +5,16 @@ first release with the library API; v0.0.1 (2021) was the command line
 tool alone.
 Complete rework, c++20, static code checks, solid principles, cleanup
 
+## [0.7.1] - 2026-11-09
+
+### Library
+- Fixed: `homeAwayBalance` now gives every team as many home as away
+  games (one more of either with an odd number of games). With teams that
+  pause, a team has fewer games than there are rounds, and the balance was
+  measured against the rounds: e.g. 4 home and 2 away games out of 6
+  counted as balanced. Plans of setups with pauses change (only home and
+  away of games are swapped).
+
 ## [0.7.0] - 2026-11-07
 
 ### Library

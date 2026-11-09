@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(smfigapl VERSION "0.7.0" LANGUAGES CXX)
+project(smfigapl VERSION "0.7.1" LANGUAGES CXX)
 # The prerelease mark of the development line ("devel"); empty in a
 # release. The development build N is the tag vX.Y.Z-devel.N of the commit
 # (cmake/version.cmake).

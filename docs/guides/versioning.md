@@ -26,6 +26,6 @@ decides when 1.0 comes.
 
 Every release is one commit with the tag `vX.Y.Z` in this repository and a
 GitHub Release with the notes from *CHANGELOG.md*. Use a release tag with
-FetchContent (`GIT_TAG v0.7.0`). The development between releases happens
+FetchContent (`GIT_TAG v0.7.1`). The development between releases happens
 elsewhere; `VERSION_STRING` of a development build has a prerelease part
 (e.g. `0.6.0-devel.3`, see smfigapl::VERSION_PRERELEASE), a release has none.

@@ -15,13 +15,13 @@ Round: 1
 
 Round: 2
                    North c1 : North c3                      
-                   North c2 : South c2                      
+                   South c2 : North c2                      
                          -  : -                             
                        Break: South c1
 
 Round: 3
                          -  : -                             
-                   North c1 : South c1                      
+                   South c1 : North c1                      
                    North c3 : South c2                      
                        Break: North c2
 
@@ -42,7 +42,7 @@ Number of games               4                        4                        
 Repeated Games                0                        0                        0                        0                        0                        
 Max Games same Team           1                        1                        1                        1                        1                        
 Same Club                     2                        2                        2                        1                        1                        
-Number of home games          3                        3                        2                        1                        1                        
-Number of away games          1                        1                        2                        3                        3                        
+Number of home games          2                        2                        2                        2                        2                        
+Number of away games          2                        2                        2                        2                        2                        
 T0                            3                        2                        4                        1                        2                        
 T1                            1                        2                        0                        3                        2                        

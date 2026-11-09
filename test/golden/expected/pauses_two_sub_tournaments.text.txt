@@ -13,8 +13,8 @@ Round: 1
                        Break: North Green, South Green
 
 Round: 2
-                  North Red : North Green                   
-                  South Red : South Green                   
+                North Green : North Red                     
+                South Green : South Red                     
                        Break: North Blue, South Blue
 
 Round: 3
@@ -27,6 +27,6 @@ Number of games               2                        2                        
 Repeated Games                0                        0                        0                        0                        0                        0                        
 Max Games same Team           1                        1                        1                        1                        1                        1                        
 Same Club                     2                        2                        2                        2                        2                        2                        
-Number of home games          2                        1                        0                        2                        1                        0                        
-Number of away games          0                        1                        2                        0                        1                        2                        
+Number of home games          1                        1                        1                        1                        1                        1                        
+Number of away games          1                        1                        1                        1                        1                        1                        
 A                             2                        2                        2                        2                        2                        2                        

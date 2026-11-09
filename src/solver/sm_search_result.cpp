@@ -125,6 +125,66 @@ void smfigapl::GamePlanSearch::calcGamePlan()
         plan.subTournaments[atomicSets_.indexByTeamId[t]].teams.push_back(teamRef(t));
 }
 
+namespace
+{
+    using smfigapl::uint;
+
+    // Directions for the edges of a multigraph such that every vertex has as
+    // many outgoing as incoming edges, one more of either at a vertex of odd
+    // degree. The vertices of odd degree (an even number of them) are joined
+    // to an extra vertex; then every vertex has an even degree, and a walk
+    // along unused edges can only get stuck where it started: the edges
+    // split into closed walks, each of which leaves a vertex as often as it
+    // enters it. Without the extra edges, a vertex loses at most one of
+    // either. Per edge: true if it goes from its first to its second vertex.
+    std::vector<bool> balancedDirections(uint NVertices, const std::vector<std::pair<uint, uint>>& edges)
+    {
+        std::vector<std::pair<uint, uint>> all = edges;
+        std::vector<uint> degree(NVertices + 1, 0);
+        for (const auto& [a, b] : edges)
+        {
+            degree[a]++;
+            degree[b]++;
+        }
+        for (uint v = 0; v < NVertices; v++)
+            if (degree[v] % 2 == 1)
+                all.emplace_back(v, NVertices);
+        // per vertex its edges, in their order: the result is deterministic
+        std::vector<std::vector<uint>> incident(NVertices + 1);
+        for (uint e = 0; e < all.size(); e++)
+        {
+            incident[all[e].first].push_back(e);
+            incident[all[e].second].push_back(e);
+        }
+        std::vector<bool> used(all.size(), false);
+        std::vector<bool> forward(all.size(), true);
+        std::vector<uint> next(NVertices + 1, 0);
+        for (uint start = 0; start <= NVertices; start++)
+        {
+            uint v = start;
+            while (true)
+            {
+                while (next[v] < incident[v].size() && used[incident[v][next[v]]])
+                    next[v]++;
+                if (next[v] == incident[v].size())
+                {
+                    if (v == start)
+                        break;
+                    // cannot happen with even degrees; ends the walk all the same
+                    v = start;
+                    continue;
+                }
+                const uint e = incident[v][next[v]];
+                used[e] = true;
+                forward[e] = all[e].first == v;
+                v = forward[e] ? all[e].second : all[e].first;
+            }
+        }
+        forward.resize(edges.size());
+        return forward;
+    }
+}
+
 void smfigapl::GamePlanSearch::countHomeAway(HomeAwayCount& count)
 {
     const Capacity& capacity = condTables_.atomicCapacityArray[condTables_.atomicIndex];
@@ -192,43 +252,65 @@ void smfigapl::GamePlanSearch::swapHomeAway(const HomeAwayCount& count, uint hom
     output_.indexedGamePlan.flipSwapAtomic(std::get<0>(maxGames[maxIndex]), std::get<1>(maxGames[maxIndex]), atomicIndex);
 }
 
+bool smfigapl::GamePlanSearch::homeAwayBalanced(const HomeAwayCount& count)
+{
+    return std::ranges::all_of(count.perTeam, [](const std::array<uint, 2>& games)
+    {
+        return std::max(games[0], games[1]) - std::min(games[0], games[1]) <= 1;
+    });
+}
+
 void smfigapl::GamePlanSearch::balancedHomeAwayCalc()
 {
     const Capacity& capacity = condTables_.atomicCapacityArray[condTables_.atomicIndex];
-    // limits of the home and away games of every team
-    std::vector<uint> halfLower(capacity.NTeams, capacity.NRounds / 2);
-    std::vector<uint> halfHigher(capacity.NTeams, (capacity.NRounds + 1) / 2);
-    for (uint k = 0; k < capacity.NTeams; k++)
-    {
-        // the pause teams of the game plan have global team ids
-        const uint team = condTables_.teamsMappingArray[condTables_.atomicIndex][k];
-        uint games = 0;
-        for (uint i = 0; i < capacity.NRounds; i++)
-            if (!output_.indexedGamePlan.isPauseTeam(i, team))
-                games++;
-        halfLower[k] = std::min(halfLower[k], games / 2);
-        halfHigher[k] = std::max(halfHigher[k], (games + 1) / 2);
-    }
-    bool check = false;
+    const uint atomicIndex = condTables_.atomicIndex;
+    // swaps a game of the team with the most home (away) games, a few times
     uint homeAway = 0; //0= start with homegame, 1= start with away game
-    //Loop until equal distribution is reached
     const uint maxLoops = capacity.NRounds * (capacity.NRounds - 1);
     uint loops = 0;
     HomeAwayCount count;
-    do
+    countHomeAway(count);
+    while (loops < maxLoops && !homeAwayBalanced(count))
     {
-        countHomeAway(count);
-        check = true;
-        for (uint l = 0; l < capacity.NTeams; l++)
-            check = check && (count.max[0] >= halfLower[l] && count.max[0] <= halfHigher[l] && count.max[1] >= halfLower[l] && count.max[1] <= halfHigher[l]);
-        if (!check)
-            swapHomeAway(count, homeAway);
+        swapHomeAway(count, homeAway);
         homeAway = count.max[0] >= count.max[1] ? 0 : 1;
+        countHomeAway(count);
         loops++;
     }
-    while (loops < maxLoops && !check);
     if (input_.dbg.has(DebugFlag::gps))
         input_.dbg.out(DebugFlag::gps) << "HomeAway Loops: " << loops << std::endl;
+    if (homeAwayBalanced(count))
+        return;
+    // the swaps can move an imbalance from team to team without an end:
+    // directions along closed walks balance every team (balancedDirections)
+    // every game as an edge from its home to its away team (local indexes)
+    std::vector<std::pair<uint, uint>> edges;
+    std::vector<std::pair<uint, uint>> places;
+    for (uint i = 0; i < capacity.NRounds; i++)
+    {
+        for (uint j = 0; j < capacity.NFields; j++)
+        {
+            IndexedGame game = output_.indexedGamePlan.getGameAtomic(i, j, atomicIndex);
+            const uint home = game.getTeamByGameId(0).getTeamId();
+            const uint away = game.getTeamByGameId(1).getTeamId();
+            if (game.getPause() || home == TEAM_UNDEFINED || away == TEAM_UNDEFINED)
+                continue;
+            edges.emplace_back(condTables_.teamIdMappingArray[home], condTables_.teamIdMappingArray[away]);
+            places.emplace_back(i, j);
+        }
+    }
+    const std::vector<bool> forward = balancedDirections(capacity.NTeams, edges);
+    uint swaps = 0;
+    for (uint e = 0; e < edges.size(); e++)
+    {
+        if (!forward[e])
+        {
+            output_.indexedGamePlan.flipSwapAtomic(places[e].first, places[e].second, atomicIndex);
+            swaps++;
+        }
+    }
+    if (input_.dbg.has(DebugFlag::gps))
+        input_.dbg.out(DebugFlag::gps) << "HomeAway swaps: " << swaps << std::endl;
 }
 
 namespace

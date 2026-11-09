@@ -29,10 +29,10 @@ Round: 3
                        Break: South c1
 
 Round: 4
-                   North c2 : South c2                      
-                   North c1 : South c1                      
+                   South c2 : North c2                      
+                   South c1 : North c1                      
                          -  : -                             
-                   North c3 : South c3                      
+                   South c3 : North c3                      
                        Break: North c4
 
 Round: 5
@@ -61,7 +61,7 @@ Number of games               6                        6                        
 Repeated Games                0                        0                        0                        0                        0                        0                        0                        
 Max Games same Team           1                        1                        1                        1                        1                        1                        1                        
 Same Club                     3                        3                        3                        3                        2                        2                        2                        
-Number of home games          4                        4                        4                        3                        2                        2                        2                        
-Number of away games          2                        2                        2                        3                        4                        4                        4                        
+Number of home games          3                        3                        3                        3                        3                        3                        3                        
+Number of away games          3                        3                        3                        3                        3                        3                        3                        
 T0                            3                        3                        1                        6                        1                        4                        2                        
 T1                            3                        3                        5                        0                        5                        2                        4                        

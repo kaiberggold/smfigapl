@@ -8,7 +8,7 @@ With FetchContent (CMake 3.20 or newer, a C++20 compiler):
 include(FetchContent)
 FetchContent_Declare(smfigapl
     GIT_REPOSITORY https://github.com/kaiberggold/smfigapl.git
-    GIT_TAG v0.7.0)
+    GIT_TAG v0.7.1)
 FetchContent_MakeAvailable(smfigapl)
 target_link_libraries(my_app PRIVATE smfigapl::smfigapl)
 ```

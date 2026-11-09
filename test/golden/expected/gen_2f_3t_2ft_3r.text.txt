@@ -14,7 +14,7 @@ Round: 1
 
 Round: 2
                          -  : -                             
-                   North c1 : South c1                      
+                   South c1 : North c1                      
                        Break: North c2
 
 Round: 3
@@ -27,7 +27,7 @@ Number of games               2                        2                        
 Repeated Games                0                        0                        0                        
 Max Games same Team           1                        1                        1                        
 Same Club                     1                        1                        0                        
-Number of home games          2                        1                        0                        
-Number of away games          0                        1                        2                        
+Number of home games          1                        1                        1                        
+Number of away games          1                        1                        1                        
 T0                            1                        1                        0                        
 T1                            1                        1                        2                        
